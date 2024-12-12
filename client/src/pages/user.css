@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;500&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Kanit', Arial, sans-serif;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+*::-webkit-scrollbar {
+    display: none;
+}
+
+.page {
+    width: 100%;
+    height: 100vh;
+    background: white;
+    display: flex;
+    color: black;
+}
+
+.sidebar {
+    width: 20%;
+    padding: 30px;
+}
+
+.content {
+    background-color: white;
+    width: 80%;
+    padding: 30px;
+}
+
+.content-page {
+    height: calc(100vh - 150px);
+    overflow: scroll;
+    margin-top: 30px;
+    margin-left: 30px;
+}
+
+.content-table {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.content-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.content-table tbody tr:nth-child(odd) {
+    background: #f9f9f9;
+}
+
+.content-table thead tr th {
+    text-align: left;
+    background: #f1f1f1;
+    color: #333333;
+}
+
+.content-table th,
+.content-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.btn {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    margin-right: 5px;
+}
+
+.btn-warning {
+    background: #f39c12;
+    color: #fff;
+}
+
+.btn-danger {
+    background: #e74c3c;
+    color: #fff;
+}
