@@ -21,6 +21,7 @@ const User = () => (
                 <th>Username</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -31,9 +32,14 @@ const User = () => (
                   <td>{user.username}</td>
                   <td>{user.email}</td>
                   <td>{user.role}</td>
+                  <td>{user.status}</td> {/* Display the status */}
                   <td>
-                    <button className="btn btn-warning"><FontAwesomeIcon icon={faEdit} /></button>
-                    <button className="btn btn-danger"><FontAwesomeIcon icon={faTrash} /></button>
+                    <button className="btn btn-warning">
+                      <FontAwesomeIcon icon={faEdit} />
+                    </button>
+                    <button className="btn btn-danger">
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
                   </td>
                 </tr>
               ))}

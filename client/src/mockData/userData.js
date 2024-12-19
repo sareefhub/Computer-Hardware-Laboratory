@@ -5,6 +5,7 @@ const users = [
       email: "admin@example.com",
       password: "admin123",
       role: "admin",
+      status: "Active",
     },
     {
       id: 2,
@@ -12,6 +13,7 @@ const users = [
       email: "user1@example.com",
       password: "user123",
       role: "user",
+      status: "Inactive",
     },
     {
       id: 3,
@@ -19,6 +21,7 @@ const users = [
       email: "user2@example.com",
       password: "user456",
       role: "user",
+      status: "Active",
     }
   ];
   
