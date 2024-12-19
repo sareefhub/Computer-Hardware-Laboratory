@@ -6,25 +6,25 @@ import './navbar.css';
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState({ name: '' });
+  const [user, setUser] = useState({ name: '', role: '' });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const username = localStorage.getItem("username");
-    if (username) {
-      setUser({ name: username });
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (currentUser) {
+      setUser({ name: currentUser.username, role: currentUser.role });
       setIsLoggedIn(true);
     } else {
-      setUser({ name: '' });
+      setUser({ name: '', role: '' });
       setIsLoggedIn(false);
     }
   }, []);
 
   const handleLoginClick = () => {
     if (isLoggedIn) {
-      localStorage.removeItem("username");
+      localStorage.removeItem("currentUser");
       setIsLoggedIn(false);
-      setUser({ name: '' });
+      setUser({ name: '', role: '' });
       navigate('/login');
     } else {
       navigate('/login');

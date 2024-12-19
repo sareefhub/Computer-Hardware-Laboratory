@@ -10,9 +10,9 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const savedUsername = localStorage.getItem("username");
-    if (savedUsername) {
-      setUsername(savedUsername);
+    const savedUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (savedUser) {
+      setUsername(savedUser.username);
     }
   }, []);
 
@@ -24,7 +24,8 @@ const Login = () => {
 
     if (user) {
       setError("");
-      localStorage.setItem("username", username);
+      const currentUser = { username: user.username, role: user.role };
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
       if (user.role === "admin") {
         navigate("/dashboard");
       } else {

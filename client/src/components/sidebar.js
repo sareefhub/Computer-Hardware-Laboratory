@@ -3,20 +3,26 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faUser, faMicrochip, faChartSimple } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './sidebar.css';
+import { getCurrentUser } from '../helpers/helper';
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const currentUser = getCurrentUser();
+  const { role } = currentUser || {};
+
   const menuItems = [
-    { path: '/home', icon: faHouse, label: 'Home' },
-    { path: '/dashboard', icon: faChartSimple, label: 'Dashboard' },
-    { path: '/user', icon: faUser, label: 'User' },
-    { path: '/hardware-list', icon: faMicrochip, label: 'Hardware List' }
+    { path: '/home', icon: faHouse, label: 'Home', roles: ['admin', 'user'] },
+    { path: '/dashboard', icon: faChartSimple, label: 'Dashboard', roles: ['admin'] },
+    { path: '/user', icon: faUser, label: 'User', roles: ['admin'] },
+    { path: '/hardware-list', icon: faMicrochip, label: 'Hardware List', roles: ['admin', 'user'] }
   ];
 
   const handleNavigate = (path) => navigate(path);
   const isActive = (path) => location.pathname === path;
+
+  const accessibleMenuItems = menuItems.filter(item => item.roles.includes(role));
 
   return (
     <div className="sidebar">
@@ -25,7 +31,7 @@ const Sidebar = () => {
       </h3>
       <div className="sidebar-main">
         <p className="cg">Menu</p>
-        {menuItems.map(({ path, icon, label }) => (
+        {accessibleMenuItems.map(({ path, icon, label }) => (
           <div
             key={path}
             className={`sidebar-items ${isActive(path) ? 'sidebar-items-active' : ''}`}
