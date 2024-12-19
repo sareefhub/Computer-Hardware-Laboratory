@@ -13,13 +13,19 @@ const Navbar = ({ isLoggedIn, handleLogout }) => {
     const username = localStorage.getItem("username");
     if (username) {
       setUser({ name: username });
+    } else {
+      setUser({ name: '' });
     }
   }, [isLoggedIn]);
+
+  const handleLoginClick = () => {
+    navigate(location.pathname === '/login' ? '/register' : '/login');
+  };
 
   return (
     <div className="navbar">
       {!isLoggedIn ? (
-        <button className="navbar-login-button" onClick={() => navigate(location.pathname === '/login' ? '/register' : '/login')}>
+        <button className="navbar-login-button" onClick={handleLoginClick}>
           Sign In
           <FontAwesomeIcon icon={faSignInAlt} />
         </button>
