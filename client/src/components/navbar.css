@@ -45,12 +45,10 @@
 }
 
 .navbar-profile {
+  font-size: 16px;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-.navbar-profile p {
-  font-size: 16px;
-  font-weight: 500;
+  gap: 20px;
+  margin-left: auto;
 }
