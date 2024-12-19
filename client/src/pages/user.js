@@ -32,7 +32,7 @@ const User = () => (
                   <td>{user.username}</td>
                   <td>{user.email}</td>
                   <td>{user.role}</td>
-                  <td>{user.status}</td> {/* Display the status */}
+                  <td>{user.status}</td>
                   <td>
                     <button className="btn btn-warning">
                       <FontAwesomeIcon icon={faEdit} />
