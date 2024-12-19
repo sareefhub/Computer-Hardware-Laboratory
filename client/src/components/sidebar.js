@@ -30,7 +30,9 @@ const Sidebar = () => {
         Computer Hardware Laboratory
       </h3>
       <div className="sidebar-main">
-        <p className="cg">Menu</p>
+        {currentUser && (
+          <p className="cg">Menu</p>
+        )}
         {accessibleMenuItems.map(({ path, icon, label }) => (
           <div
             key={path}
