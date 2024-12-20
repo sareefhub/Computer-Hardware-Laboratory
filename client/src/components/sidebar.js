@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faUser, faMicrochip, faChartSimple } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faUser, faMicrochip, faChartSimple, faHandshake, faHistory } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './sidebar.css';
 import { getCurrentUser } from '../helpers/helper';
@@ -16,7 +16,9 @@ const Sidebar = () => {
     { path: '/home', icon: faHouse, label: 'Home', roles: ['admin', 'user'] },
     { path: '/dashboard', icon: faChartSimple, label: 'Dashboard', roles: ['admin'] },
     { path: '/user', icon: faUser, label: 'User', roles: ['admin'] },
-    { path: '/hardware-list', icon: faMicrochip, label: 'Hardware List', roles: ['admin', 'user'] }
+    { path: '/hardware-list', icon: faMicrochip, label: 'Hardware List', roles: ['admin', 'user'] },
+    { path: '/borrow-equipment', icon: faHandshake, label: 'Borrow Equipment', roles: ['admin', 'user'] },
+    { path: '/borrowing-history', icon: faHistory, label: 'Borrowing History', roles: ['admin', 'user'] }  // New menu item
   ];
 
   const handleNavigate = (path) => navigate(path);

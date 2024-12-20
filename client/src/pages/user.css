@@ -46,6 +46,7 @@
 .content-table table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 15px;
 }
 
 .content-table tbody tr:nth-child(odd) {
@@ -53,7 +54,6 @@
 }
 
 .content-table thead tr th {
-    text-align: left;
     background: #f1f1f1;
     color: #333333;
 }
@@ -81,4 +81,10 @@
 .btn-danger {
     background: #e74c3c;
     color: #fff;
+}
+
+.content-table table th, 
+.content-table table td {
+    text-align: center;
+    vertical-align: middle;
 }
