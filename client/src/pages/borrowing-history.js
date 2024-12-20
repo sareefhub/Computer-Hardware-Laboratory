@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Sidebar from '../components/sidebar';
 import Navbar from '../components/navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './borrowing-history.css';
 import hardwareData from '../mockData/hardwareData';
 
@@ -44,7 +44,6 @@ const BorrowingHistory = () => {
                     <td>{item.returnDate ? new Date(item.returnDate).toLocaleDateString() : 'N/A'}</td>
                     <td>{item.borrower || 'N/A'}</td>
                     <td>
-                      <button className="btn btn-warning"><FontAwesomeIcon icon={faEdit} /></button>
                       <button className="btn btn-danger"><FontAwesomeIcon icon={faTrash} /></button>
                     </td>
                   </tr>
