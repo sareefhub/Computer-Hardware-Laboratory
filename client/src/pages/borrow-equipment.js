@@ -8,17 +8,11 @@ import hardwareData from '../mockData/hardwareData';
 
 const BorrowEquipment = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [currentPage, setCurrentPage] = useState(1);
 
-  const itemsPerPage = 5;
   const categories = ['All', ...new Set(hardwareData.map(item => item.category))];
   const filteredData = selectedCategory === 'All' ? hardwareData : hardwareData.filter(item => item.category === selectedCategory);
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const paginatedData = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleCategoryChange = (e) => setSelectedCategory(e.target.value);
-  const handlePageChange = (direction) => setCurrentPage(prevPage => direction === 'next' ? Math.min(prevPage + 1, totalPages) : Math.max(prevPage - 1, 1));
-
   const handleBorrow = (id) => {
     console.log("Borrowing item with ID:", id);
   };
@@ -48,30 +42,27 @@ const BorrowEquipment = () => {
                 </tr>
               </thead>
               <tbody>
-                {paginatedData.map((item, index) => (
+                {filteredData.map((item, index) => (
                   <tr key={item.id}>
-                    <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                    <td>{index + 1}</td>
                     <td>{item.category}</td>
                     <td>{item.deviceName}</td>
                     <td>{item.totalQuantity - item.borrowedQuantity}</td>
                     <td>
                       <button className="btn btn-success" onClick={() => handleBorrow(item.id)}>
-                      <FontAwesomeIcon icon={faHandshake} /> Borrow
+                        <FontAwesomeIcon icon={faHandshake} /> Borrow
                       </button>
                     </td>
                     <td>
-                      <button className="btn btn-warning"><FontAwesomeIcon icon={faEdit} /></button>
-                      <button className="btn btn-danger"><FontAwesomeIcon icon={faTrash} /></button>
+                      <div className="actions-container">
+                        <button className="btn btn-warning"><FontAwesomeIcon icon={faEdit} /></button>
+                        <button className="btn btn-danger"><FontAwesomeIcon icon={faTrash} /></button>
+                      </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </div>
-          <div className="pagination">
-            <button onClick={() => handlePageChange('prev')} disabled={currentPage === 1}>Previous</button>
-            <span>Page {currentPage} of {totalPages}</span>
-            <button onClick={() => handlePageChange('next')} disabled={currentPage === totalPages}>Next</button>
           </div>
         </div>
       </div>

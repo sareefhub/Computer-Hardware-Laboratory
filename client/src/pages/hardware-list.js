@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';  // เพิ่มการใช้งาน useNavigate
 import Sidebar from '../components/sidebar';
 import Navbar from '../components/navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,6 +10,7 @@ import hardwareData from '../mockData/hardwareData';
 const HardwareList = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();  // ใช้ useNavigate
 
   const itemsPerPage = 5;
   const categories = ['All', ...new Set(hardwareData.map(item => item.category))];
@@ -18,7 +20,10 @@ const HardwareList = () => {
 
   const handleCategoryChange = (e) => setSelectedCategory(e.target.value);
   const handlePageChange = (direction) => setCurrentPage(prevPage => direction === 'next' ? Math.min(prevPage + 1, totalPages) : Math.max(prevPage - 1, 1));
-  const handleViewDetails = (id) => console.log("Viewing details for item ID:", id);
+  const handleViewDetails = (id) => {
+    // นำทางไปยังหน้า HardwareDetail พร้อมกับ id ของ item
+    navigate(`/hardware-detail/${id}`);
+  };
 
   return (
     <div className="page">
@@ -57,14 +62,20 @@ const HardwareList = () => {
                     <td>{item.totalQuantity - item.borrowedQuantity}</td>
                     <td>${item.pricePerUnit.toFixed(2)}</td>
                     <td>
-                      <button className="btn btn-success view-details-btn" onClick={() => handleViewDetails(item.id)}>
-                        <FontAwesomeIcon icon={faEye} /> ดูรายละเอียด
+                    <button className="btn btn-success view-details-btn" onClick={() => handleViewDetails(item.id)}>
+                      <FontAwesomeIcon icon={faEye} /> ดูรายละเอียด
+                    </button>
+                  </td>
+                  <td>
+                    <div className="actions-cell">
+                      <button className="btn btn-warning btn-action">
+                        <FontAwesomeIcon icon={faEdit} />
                       </button>
-                    </td>
-                    <td>
-                      <button className="btn btn-warning"><FontAwesomeIcon icon={faEdit} /></button>
-                      <button className="btn btn-danger"><FontAwesomeIcon icon={faTrash} /></button>
-                    </td>
+                      <button className="btn btn-danger btn-action">
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </div>
+                  </td>
                   </tr>
                 ))}
               </tbody>

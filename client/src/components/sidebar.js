@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faUser, faMicrochip, faChartSimple, faHandshake, faHistory } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faMicrochip, faChartSimple, faHandshake, faHistory } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './sidebar.css';
 import { getCurrentUser } from '../helpers/helper';
@@ -13,7 +13,6 @@ const Sidebar = () => {
   const { role } = currentUser || {};
 
   const menuItems = [
-    { path: '/home', icon: faHouse, label: 'Home', roles: ['admin', 'user'] },
     { path: '/dashboard', icon: faChartSimple, label: 'Dashboard', roles: ['admin'] },
     { path: '/user', icon: faUser, label: 'User', roles: ['admin'] },
     { path: '/hardware-list', icon: faMicrochip, label: 'Hardware List', roles: ['admin', 'user'] },

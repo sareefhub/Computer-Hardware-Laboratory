@@ -8,6 +8,7 @@ import User from "./pages/user";
 import HardwareList from "./pages/hardware-list";
 import BorrowEquipment from './pages/borrow-equipment';
 import BorrowingHistory from "./pages/borrowing-history";
+import HardwareDetail from './pages/hardware-detail';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path='/hardware-list' element={<HardwareList/>}/>
           <Route path='/borrow-equipment' element={<BorrowEquipment/>}/>
           <Route path='/borrowing-history' element={<BorrowingHistory/>}/>
+          <Route path="/hardware-detail/:id" element={<HardwareDetail />} />
         </Routes>
     </BrowserRouter>
   );
