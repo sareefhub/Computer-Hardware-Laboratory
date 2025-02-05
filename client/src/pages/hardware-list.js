@@ -34,7 +34,7 @@ const HardwareList = () => {
         <div className="content-page">
           <div className="content-header">
             <h2 className="page-title">รายการอุปกรณ์</h2>
-            <p>จำนวนทั้งหมด: {filteredData.length} รายการ</p>
+            <p>จำนวนอุปกรณ์ทั้งหมด: {filteredData.length} รายการ</p>
             <div className="category-filter">
               <label htmlFor="category-dropdown">หมวดหมู่:</label>
               <select id="category-dropdown" value={selectedCategory} onChange={handleCategoryChange}>
