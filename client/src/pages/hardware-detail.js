@@ -9,13 +9,13 @@ const HardwareDetail = () => {
   const { id } = useParams()
   const hardware = hardwareData.find((item) => item.id === Number.parseInt(id))
 
-  // Sample data - In real app, this would come from your database
+  // ข้อมูลตัวอย่าง - ในระบบจริง ควรดึงข้อมูลจากฐานข้อมูล
   const sampleHardware = {
     ...hardware,
     images: ["/placeholder.svg?height=300&width=400", "/placeholder.svg?height=300&width=400"],
     tutorial: {
       videoUrl: "https://www.youtube.com/embed/example",
-      description: "วิธีการใช้งานอุปกรณ์อย่างละเอียด",
+      description: "คำแนะนำการใช้งานอุปกรณ์โดยละเอียด",
     },
     datasheet: {
       url: "example.pdf",
@@ -27,7 +27,7 @@ const HardwareDetail = () => {
   if (!hardware) {
     return (
       <div className="not-found">
-        <h2>Item not found!</h2>
+        <h2>ไม่พบอุปกรณ์!</h2>
       </div>
     )
   }
@@ -39,42 +39,42 @@ const HardwareDetail = () => {
         <Navbar />
         <div className="content-page">
           <div className="hardware-detail">
-            {/* Back Button */}
+            {/* ปุ่มย้อนกลับ */}
             <button onClick={() => window.history.back()} className="back-btn">
-              ← Back
+              ← กลับ
             </button>
 
             <div className="hardware-content">
-              {/* Main Content Area */}
+              {/* ส่วนเนื้อหาหลัก */}
               <div className="main-content">
-                {/* Hardware Info Card */}
+                {/* ข้อมูลอุปกรณ์ */}
                 <div className="hardware-info">
                   <h2>{hardware.deviceName}</h2>
                   <div className="info-grid">
                     <div className="info-item">
-                      <label>Category:</label>
+                      <label>หมวดหมู่:</label>
                       <span>{hardware.category}</span>
                     </div>
                     <div className="info-item">
-                      <label>Total Quantity:</label>
+                      <label>จำนวนทั้งหมด:</label>
                       <span>{hardware.totalQuantity}</span>
                     </div>
                     <div className="info-item">
-                      <label>Borrowed Quantity:</label>
+                      <label>จำนวนที่ถูกยืม:</label>
                       <span>{hardware.borrowedQuantity}</span>
                     </div>
                     <div className="info-item">
-                      <label>Remaining Quantity:</label>
+                      <label>จำนวนคงเหลือ:</label>
                       <span>{hardware.totalQuantity - hardware.borrowedQuantity}</span>
                     </div>
                     <div className="info-item">
-                      <label>Price per Unit:</label>
-                      <span>${hardware.pricePerUnit.toFixed(2)}</span>
+                      <label>ราคาต่อหน่วย:</label>
+                      <span>{hardware.pricePerUnit.toFixed(2)} บาท</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Hardware Images */}
+                {/* รูปภาพอุปกรณ์ */}
                 <div className="hardware-images">
                   <div className="section-header">
                     <ImageIcon className="section-icon" />
@@ -85,7 +85,7 @@ const HardwareDetail = () => {
                       <img
                         key={index}
                         src={img || "/placeholder.svg"}
-                        alt={`${hardware.deviceName} view ${index + 1}`}
+                        alt={`${hardware.deviceName} รูปที่ ${index + 1}`}
                         className="device-image"
                       />
                     ))}
@@ -93,14 +93,14 @@ const HardwareDetail = () => {
                 </div>
               </div>
 
-              {/* Sidebar Content */}
+              {/* ส่วนข้อมูลด้านข้าง */}
               <div className="side-content">
-                {/* Datasheet Section */}
+                {/* ส่วน Datasheet */}
                 {sampleHardware.datasheet && (
                   <div className="datasheet-section">
                     <div className="section-header">
                       <FileText className="section-icon" />
-                      <h3>Datasheet</h3>
+                      <h3>เอกสาร Datasheet</h3>
                     </div>
                     <div className="datasheet-content">
                       <div className="datasheet-info">
@@ -108,24 +108,24 @@ const HardwareDetail = () => {
                         <span className="datasheet-size">{sampleHardware.datasheet.size}</span>
                       </div>
                       <a href={sampleHardware.datasheet.url} className="download-btn" target="_blank" rel="noopener noreferrer">
-                        Download
+                        ดาวน์โหลด
                       </a>
                     </div>
                   </div>
                 )}
 
-                {/* Tutorial Section */}
+                {/* ส่วนวิดีโอแนะนำการใช้งาน */}
                 {sampleHardware.tutorial && (
                   <div className="tutorial-section">
                     <div className="section-header">
                       <Youtube className="section-icon" />
-                      <h3>วิธีการใช้งาน</h3>
+                      <h3>วิดีโอแนะนำการใช้งาน</h3>
                     </div>
                     {sampleHardware.tutorial.videoUrl && (
                       <div className="video-container">
                         <iframe
                           src={sampleHardware.tutorial.videoUrl}
-                          title="Tutorial Video"
+                          title="วิดีโอแนะนำการใช้งาน"
                           frameBorder="0"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowFullScreen
