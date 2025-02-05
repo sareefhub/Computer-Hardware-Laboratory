@@ -1,29 +1,30 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';  // เพิ่มการใช้งาน useNavigate
+import { useNavigate } from 'react-router-dom';  
 import Sidebar from '../components/sidebar';
 import Navbar from '../components/navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import './hardware-list.css';
 import hardwareData from '../mockData/hardwareData';
+import { getCurrentUser } from '../helpers/helper'; // ดึงข้อมูลผู้ใช้
 
 const HardwareList = () => {
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState('ทั้งหมด');
   const [currentPage, setCurrentPage] = useState(1);
-  const navigate = useNavigate();  // ใช้ useNavigate
+  const navigate = useNavigate();  
+
+  const currentUser = getCurrentUser();  // ดึงข้อมูลผู้ใช้
+  const { role } = currentUser || {};    // ดึงบทบาท (admin/user)
 
   const itemsPerPage = 5;
-  const categories = ['All', ...new Set(hardwareData.map(item => item.category))];
-  const filteredData = selectedCategory === 'All' ? hardwareData : hardwareData.filter(item => item.category === selectedCategory);
+  const categories = ['ทั้งหมด', ...new Set(hardwareData.map(item => item.category))];
+  const filteredData = selectedCategory === 'ทั้งหมด' ? hardwareData : hardwareData.filter(item => item.category === selectedCategory);
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const paginatedData = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleCategoryChange = (e) => setSelectedCategory(e.target.value);
   const handlePageChange = (direction) => setCurrentPage(prevPage => direction === 'next' ? Math.min(prevPage + 1, totalPages) : Math.max(prevPage - 1, 1));
-  const handleViewDetails = (id) => {
-    // นำทางไปยังหน้า HardwareDetail พร้อมกับ id ของ item
-    navigate(`/hardware-detail/${id}`);
-  };
+  const handleViewDetails = (id) => navigate(`/hardware-detail/${id}`);
 
   return (
     <div className="page">
@@ -32,10 +33,10 @@ const HardwareList = () => {
         <Navbar />
         <div className="content-page">
           <div className="content-header">
-            <h2 className="page-title">Hardware List</h2>
-            <p>Total Items: {filteredData.length}</p>
+            <h2 className="page-title">รายการอุปกรณ์</h2>
+            <p>จำนวนทั้งหมด: {filteredData.length} รายการ</p>
             <div className="category-filter">
-              <label htmlFor="category-dropdown">Filter by Category:</label>
+              <label htmlFor="category-dropdown">หมวดหมู่:</label>
               <select id="category-dropdown" value={selectedCategory} onChange={handleCategoryChange}>
                 {categories.map(category => <option key={category} value={category}>{category}</option>)}
               </select>
@@ -45,10 +46,11 @@ const HardwareList = () => {
             <table>
               <thead>
                 <tr>
-                  <th>#</th><th>Category</th><th>Device Name</th>
-                  <th>Total<br />Quantity</th><th>Borrowed<br />Quantity</th>
-                  <th>Remaining<br />Quantity</th><th>Price<br />per Unit</th>
-                  <th>Detail</th><th>Actions</th>
+                  <th>#</th><th>หมวดหมู่</th><th>ชื่ออุปกรณ์</th>
+                  <th>จำนวน<br />ทั้งหมด</th><th>จำนวนที่ถูกยืม</th>
+                  <th>จำนวนที่เหลือ</th><th>ราคา/หน่วย</th>
+                  <th>รายละเอียด</th>
+                  {role !== 'user' && <th>การจัดการ</th>}
                 </tr>
               </thead>
               <tbody>
@@ -60,31 +62,33 @@ const HardwareList = () => {
                     <td>{item.totalQuantity}</td>
                     <td>{item.borrowedQuantity}</td>
                     <td>{item.totalQuantity - item.borrowedQuantity}</td>
-                    <td>${item.pricePerUnit.toFixed(2)}</td>
+                    <td>{item.pricePerUnit.toFixed(2)} บาท</td>
                     <td>
-                    <button className="btn btn-success view-details-btn" onClick={() => handleViewDetails(item.id)}>
-                      <FontAwesomeIcon icon={faEye} /> ดูรายละเอียด
-                    </button>
-                  </td>
-                  <td>
-                    <div className="actions-cell">
-                      <button className="btn btn-warning btn-action">
-                        <FontAwesomeIcon icon={faEdit} />
+                      <button className="btn btn-success view-details-btn" onClick={() => handleViewDetails(item.id)}>
+                        <FontAwesomeIcon icon={faEye} /> ดูรายละเอียด
                       </button>
-                      <button className="btn btn-danger btn-action">
-                        <FontAwesomeIcon icon={faTrash} />
-                      </button>
-                    </div>
-                  </td>
+                    </td>
+                    {role !== 'user' && (
+                      <td>
+                        <div className="actions-cell">
+                          <button className="btn btn-warning btn-action">
+                            <FontAwesomeIcon icon={faEdit} />
+                          </button>
+                          <button className="btn btn-danger btn-action">
+                            <FontAwesomeIcon icon={faTrash} />
+                          </button>
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <div className="pagination">
-            <button onClick={() => handlePageChange('prev')} disabled={currentPage === 1}>Previous</button>
-            <span>Page {currentPage} of {totalPages}</span>
-            <button onClick={() => handlePageChange('next')} disabled={currentPage === totalPages}>Next</button>
+            <button onClick={() => handlePageChange('prev')} disabled={currentPage === 1}>ก่อนหน้า</button>
+            <span>หน้า {currentPage} จาก {totalPages}</span>
+            <button onClick={() => handlePageChange('next')} disabled={currentPage === totalPages}>ถัดไป</button>
           </div>
         </div>
       </div>

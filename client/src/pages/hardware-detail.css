@@ -7,46 +7,263 @@
   font-family: "Kanit", Arial, sans-serif;
 }
 
+.page {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+.content-page {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+
 .hardware-detail {
   width: 100%;
-  max-width: 800px;
-  padding: 30px;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-left: 250px; 
+  padding: 24px;
 }
 
-.hardware-detail h2 {
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 15px;
+.back-btn {
+  background-color: #f8f9fa;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  color: #666;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.back-btn:hover {
+  background-color: #e9ecef;
   color: #333;
 }
 
-.hardware-detail p {
-  font-size: 1.1rem;
-  margin-bottom: 10px;
-  color: #555;
+.hardware-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
 }
 
-.hardware-detail strong {
+/* Main Content Styles */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.hardware-info {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.hardware-info h2 {
+  font-size: 1.8rem;
   font-weight: 600;
+  color: #333;
+  margin-bottom: 24px;
+}
+
+.info-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.info-item {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  align-items: center;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-item label {
+  font-weight: 500;
+  color: #666;
+}
+
+.info-item span {
+  color: #333;
+  font-size: 1rem;
+}
+
+/* Section Headers */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.section-icon {
+  width: 20px;
+  height: 20px;
+  color: #666;
+}
+
+.section-header h3 {
+  font-size: 1.2rem;
+  color: #333;
+  font-weight: 500;
+}
+
+/* Images Section */
+.hardware-images {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.device-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+/* Side Content Styles */
+.side-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Datasheet Section */
+.datasheet-section {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.datasheet-content {
+  background-color: white;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 16px;
+}
+
+.datasheet-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.datasheet-name {
+  font-weight: 500;
   color: #333;
 }
 
-.hardware-detail .back-btn {
-  margin-top: 20px;
+.datasheet-size {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.download-btn {
+  display: inline-block;
   background-color: #007bff;
   color: white;
-  padding: 10px 20px;
+  padding: 8px 16px;
+  border-radius: 4px;
   text-decoration: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  transition: background-color 0.3s;
-  display: inline-block;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
 }
 
-.hardware-detail .back-btn:hover {
+.download-btn:hover {
   background-color: #0056b3;
+}
+
+/* Tutorial Section */
+.tutorial-section {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+
+.tutorial-description {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+.not-found {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.5rem;
+  color: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .hardware-content {
+    grid-template-columns: 1fr;
+  }
+
+  .side-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .side-content {
+    grid-template-columns: 1fr;
+  }
+
+  .info-item {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .hardware-info h2 {
+    font-size: 1.5rem;
+  }
 }

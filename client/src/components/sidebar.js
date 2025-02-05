@@ -1,6 +1,16 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faMicrochip, faChartSimple, faHandshake, faHistory } from '@fortawesome/free-solid-svg-icons';
+import { 
+  faUser, 
+  faMicrochip, 
+  faChartSimple, 
+  faHandshake, 
+  faHistory,
+  faPrint,
+  faKey,
+  faCircleQuestion,
+  faHandHolding
+} from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './sidebar.css';
 import { getCurrentUser } from '../helpers/helper';
@@ -13,11 +23,15 @@ const Sidebar = () => {
   const { role } = currentUser || {};
 
   const menuItems = [
-    { path: '/dashboard', icon: faChartSimple, label: 'Dashboard', roles: ['admin'] },
-    { path: '/user', icon: faUser, label: 'User', roles: ['admin'] },
-    { path: '/hardware-list', icon: faMicrochip, label: 'Hardware List', roles: ['admin', 'user'] },
-    { path: '/borrow-equipment', icon: faHandshake, label: 'Borrow Equipment', roles: ['admin', 'user'] },
-    { path: '/borrowing-history', icon: faHistory, label: 'Borrowing History', roles: ['admin', 'user'] }  // New menu item
+    { path: '/dashboard', icon: faChartSimple, label: 'แดชบอร์ด', roles: ['admin'] },
+    { path: '/user', icon: faUser, label: 'ผู้ใช้', roles: ['admin'] },
+    { path: '/hardware-list', icon: faMicrochip, label: 'รายการฮาร์ดแวร์', roles: ['admin', 'user'] },
+    { path: '/borrow-equipment', icon: faHandshake, label: 'ยืมอุปกรณ์', roles: ['admin', 'user'] },
+    { path: '/borrow-form', icon: faHandHolding, label: 'รายการยืมอุปกรณ์', roles: ['admin', 'user'] },
+    { path: '/print-delivery', icon: faPrint, label: 'พิมพ์ใบนำส่งอุปกรณ์', roles: ['admin', 'user'] },
+    { path: '/borrowing-history', icon: faHistory, label: 'ประวัติการยืม', roles: ['admin', 'user'] },
+    { path: '/change-password', icon: faKey, label: 'เปลี่ยนรหัสผ่าน', roles: ['admin', 'user'] },
+    { path: '/how-to-use', icon: faCircleQuestion, label: 'วิธีการใช้งาน', roles: ['admin', 'user'] }
   ];
 
   const handleNavigate = (path) => navigate(path);
@@ -32,7 +46,7 @@ const Sidebar = () => {
       </h3>
       <div className="sidebar-main">
         {currentUser && (
-          <p className="cg">Menu</p>
+          <p className="cg">เมนู</p>
         )}
         {accessibleMenuItems.map(({ path, icon, label }) => (
           <div

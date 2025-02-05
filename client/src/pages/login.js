@@ -29,7 +29,7 @@ const Login = () => {
       if (user.role === "admin") {
         navigate("/dashboard");
       } else {
-        navigate("/home");
+        navigate("/hardware-list");
       }
     } else {
       setError("Invalid username or password");

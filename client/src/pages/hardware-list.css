@@ -74,14 +74,6 @@
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
 }
 
-.content-table {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  margin-bottom: 1.5rem;
-}
-
 table {
   width: 100%;
   border-collapse: separate;
@@ -136,25 +128,6 @@ tbody tr:hover {
   background: #bbf7d0;
 }
 
-.btn-warning {
-  background: #fef3c7;
-  color: #92400e;
-  margin-right: 0.5rem;
-}
-
-.btn-warning:hover {
-  background: #fde68a;
-}
-
-.btn-danger {
-  background: #fee2e2;
-  color: #991b1b;
-}
-
-.btn-danger:hover {
-  background: #fecaca;
-}
-
 .pagination {
   display: flex;
   justify-content: flex-end;
@@ -172,11 +145,6 @@ tbody tr:hover {
   font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s ease;
-}
-
-.pagination button:hover:not(:disabled) {
-  background: #f8fafc;
-  border-color: #d1d5db;
 }
 
 .pagination button:disabled {
