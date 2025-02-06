@@ -9,7 +9,7 @@ import HardwareList from "./pages/hardware-list";
 import BorrowEquipment from './pages/borrow-equipment';
 import BorrowingHistory from "./pages/borrowing-history";
 import HardwareDetail from './pages/hardware-detail';
-import BorrowForm from "./pages/borrow-form";
+import BorrowConfirm from "./pages/borrow-confirm";
 
 function App() {
   return (
@@ -25,7 +25,7 @@ function App() {
           <Route path='/borrow-equipment' element={<BorrowEquipment/>}/>
           <Route path='/borrowing-history' element={<BorrowingHistory/>}/>
           <Route path="/hardware-detail/:id" element={<HardwareDetail />}/>
-          <Route path='/borrow-form' element={<BorrowForm/>}/>
+          <Route path='/borrow-confirm' element={<BorrowConfirm/>}/>
         </Routes>
     </BrowserRouter>
   );
