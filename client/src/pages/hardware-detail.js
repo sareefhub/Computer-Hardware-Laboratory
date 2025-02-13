@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom"
-import { ArrowLeft, FileText, Youtube, ImageIcon } from 'lucide-react'
+import { FileText, Youtube, ImageIcon } from 'lucide-react'
 import hardwareData from "../mockData/hardwareData"
 import Sidebar from "../components/sidebar"
 import Navbar from "../components/navbar"
@@ -147,3 +147,4 @@ const HardwareDetail = () => {
 }
 
 export default HardwareDetail
+  
