@@ -1,12 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Sidebar from "../components/sidebar";
 import Navbar from "../components/navbar";
 import "./borrow-confirm.css";
 
-const BorrowConfirm = ({ borrowedItems = [], onRemoveItem, onConfirmBorrow }) => {
+// Function to get borrowed items from localStorage
+const getBorrowedItems = () => {
+  return JSON.parse(localStorage.getItem("borrowedItems")) || [];
+};
+
+const BorrowConfirm = ({ onRemoveItem, onConfirmBorrow }) => {
+  const [borrowedItems, setBorrowedItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
+
+  useEffect(() => {
+    const items = getBorrowedItems(); // Get borrowed items from localStorage
+    setBorrowedItems(items);
+  }, []); // Empty dependency array to run only once when the component mounts
 
   const handleSelectItem = (id) => {
     setSelectedItems((prevSelectedItems) =>
@@ -17,7 +28,14 @@ const BorrowConfirm = ({ borrowedItems = [], onRemoveItem, onConfirmBorrow }) =>
   };
 
   const handleRemoveItem = (id) => {
-    onRemoveItem(id);
+    // Remove the item from localStorage and update state
+    const updatedItems = borrowedItems.filter(item => item.id !== id);
+    setBorrowedItems(updatedItems);
+
+    // Update the localStorage with the removed item
+    localStorage.setItem("borrowedItems", JSON.stringify(updatedItems));
+
+    onRemoveItem(id); // Call the onRemoveItem function if necessary
   };
 
   const handleConfirmBorrow = () => {
