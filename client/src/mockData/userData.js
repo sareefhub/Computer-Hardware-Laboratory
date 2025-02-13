@@ -19,7 +19,7 @@ const users = [
       id: 3,
       username: "user2",
       email: "user2@example.com",
-      password: "user456",
+      password: "user123",
       role: "user",
       status: "Active",
     }
