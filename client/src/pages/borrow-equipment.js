@@ -1,55 +1,43 @@
-import { useState } from "react"
-import Sidebar from "../components/sidebar"
-import Navbar from "../components/navbar"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEdit, faTrash, faHandshake } from "@fortawesome/free-solid-svg-icons"
-import "./borrow-equipment.css"
-import hardwareData from "../mockData/hardwareData"
-import { getCurrentUser } from "../helpers/helper"
-import BorrowDialog from "../components/borrow-dialog"
+import { useState } from "react";
+import Sidebar from "../components/sidebar";
+import Navbar from "../components/navbar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHandHolding, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import "./borrow-equipment.css";
+import hardwareData from "../mockData/hardwareData";
+import { getCurrentUser } from "../helpers/helper";
+import BorrowDialog from "../components/borrow-dialog";
 
 const BorrowEquipment = () => {
-  const [selectedCategory, setSelectedCategory] = useState("ทั้งหมด")
-  const [currentPage, setCurrentPage] = useState(1)
-  const [selectedItem, setSelectedItem] = useState(null)
+  const [selectedCategory, setSelectedCategory] = useState("ทั้งหมด");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedItem, setSelectedItem] = useState(null);
 
-  const currentUser = getCurrentUser()
-  const { role } = currentUser || {}
+  const currentUser = getCurrentUser();
+  const { role } = currentUser || {};
 
-  const itemsPerPage = 5
-  const categories = ["ทั้งหมด", ...new Set(hardwareData.map((item) => item.category))]
+  const itemsPerPage = 5;
+  const categories = ["ทั้งหมด", ...new Set(hardwareData.map((item) => item.category))];
   const filteredData =
-    selectedCategory === "ทั้งหมด" ? hardwareData : hardwareData.filter((item) => item.category === selectedCategory)
+    selectedCategory === "ทั้งหมด" ? hardwareData : hardwareData.filter((item) => item.category === selectedCategory);
 
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage)
-  const paginatedData = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const paginatedData = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleCategoryChange = (e) => {
-    setSelectedCategory(e.target.value)
-    setCurrentPage(1)
-  }
+    setSelectedCategory(e.target.value);
+    setCurrentPage(1);
+  };
 
   const handlePageChange = (direction) => {
     setCurrentPage((prevPage) =>
       direction === "next" ? Math.min(prevPage + 1, totalPages) : Math.max(prevPage - 1, 1),
-    )
-  }
+    );
+  };
 
   const handleBorrow = (item) => {
-    setSelectedItem(item)
-  }
-
-  const handleConfirmBorrow = (borrowData) => {
-    // Here you would typically:
-    // 1. Update your borrowing cart state
-    // 2. Send data to backend
-    // 3. Update UI accordingly
-    console.log("Confirmed borrow:", borrowData)
-    setSelectedItem(null)
-    // Navigate to borrow form or update local state
-    // For now, we'll just log the data
-    console.log("Item added to borrow list:", borrowData)
-  }
+    setSelectedItem(item);
+  };
 
   return (
     <div className="page">
@@ -96,7 +84,7 @@ const BorrowEquipment = () => {
                     <td>{item.pricePerUnit} บาท</td>
                     <td>
                       <button className="btn btn-success" onClick={() => handleBorrow(item)}>
-                        <FontAwesomeIcon icon={faHandshake} /> ยืม
+                        <FontAwesomeIcon icon={faHandHolding} /> ยืม
                       </button>
                     </td>
                     {role !== "user" && (
@@ -130,11 +118,10 @@ const BorrowEquipment = () => {
         </div>
       </div>
       {selectedItem && (
-        <BorrowDialog item={selectedItem} onClose={() => setSelectedItem(null)} onConfirm={handleConfirmBorrow} />
+        <BorrowDialog item={selectedItem} onClose={() => setSelectedItem(null)} onConfirm={() => {}} />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default BorrowEquipment
-
+export default BorrowEquipment;
