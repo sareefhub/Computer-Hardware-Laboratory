@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Sidebar from "../components/sidebar";
 import Navbar from "../components/navbar";
+import { getCurrentUser } from "../helpers/helper";
 import "./borrow-confirm.css";
 
 // Function to get borrowed items from localStorage
@@ -15,27 +16,29 @@ const BorrowConfirm = ({ onRemoveItem, onConfirmBorrow }) => {
   const [selectedItems, setSelectedItems] = useState([]);
 
   useEffect(() => {
-    const items = getBorrowedItems(); // Get borrowed items from localStorage
-    setBorrowedItems(items);
+    const currentUser = getCurrentUser(); // ดึงข้อมูล currentUser จาก localStorage
+
+    if (currentUser) {
+      const items = getBorrowedItems(); // Get borrowed items from localStorage
+      const filteredItems = items.filter(item => item.borrowerName === currentUser.username); // Filter by borrowerName
+      setBorrowedItems(filteredItems);
+    }
   }, []); // Empty dependency array to run only once when the component mounts
 
   const handleSelectItem = (id) => {
-    setSelectedItems((prevSelectedItems) =>
-      prevSelectedItems.includes(id)
+    setSelectedItems((prevSelectedItems) => {
+      const newSelectedItems = prevSelectedItems.includes(id)
         ? prevSelectedItems.filter((itemId) => itemId !== id)
-        : [...prevSelectedItems, id]
-    );
+        : [...prevSelectedItems, id];
+      return newSelectedItems;
+    });
   };
 
   const handleRemoveItem = (id) => {
-    // Remove the item from localStorage and update state
     const updatedItems = borrowedItems.filter(item => item.id !== id);
     setBorrowedItems(updatedItems);
-
-    // Update the localStorage with the removed item
     localStorage.setItem("borrowedItems", JSON.stringify(updatedItems));
-
-    onRemoveItem(id); // Call the onRemoveItem function if necessary
+    onRemoveItem(id);
   };
 
   const handleConfirmBorrow = () => {

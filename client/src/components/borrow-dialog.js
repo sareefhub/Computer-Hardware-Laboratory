@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { addBorrowedItem } from "../mockData/borrowedItemsData"; // ฟังก์ชันเพิ่มข้อมูลการยืม
 import "./borrow-dialog.css";
 
-// Function to get the current user's info from localStorage
 const getCurrentUser = () => {
   const currentUser = localStorage.getItem("currentUser");
   return currentUser ? JSON.parse(currentUser) : null;
@@ -11,31 +11,50 @@ const BorrowDialog = ({ item, onClose, onConfirm }) => {
   const [quantity, setQuantity] = useState(1);
   const [borrowerName, setBorrowerName] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("Lab");
+  const [userId, setUserId] = useState(null);
   const maxQuantity = item.totalQuantity - item.borrowedQuantity;
 
-  // Get current user's name from localStorage when the component is mounted
+  const isSubmitting = useRef(false);
+
   useEffect(() => {
     const currentUser = getCurrentUser();
-    if (currentUser && currentUser.username) {
+    if (currentUser) {
       setBorrowerName(currentUser.username);
+      setUserId(currentUser.id);
     }
   }, []);
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Send borrowing details to the parent component
-    onConfirm({
+
+    if (isSubmitting.current) return;
+
+    isSubmitting.current = true;
+
+    const returnDate = new Date();
+    returnDate.setDate(returnDate.getDate() + 7);
+
+    const borrowData = {
       id: item.id,
+      userId,
       borrowerName,
       borrowQuantity: quantity,
-      borrowDate: new Date().toISOString(),
+      borrowDate: new Date().toLocaleDateString(),
       borrowTime: new Date().toLocaleTimeString(),
+      returnDate: returnDate.toLocaleDateString(),
       subject: selectedSubject,
       deviceName: item.deviceName,
       category: item.category,
-      maxQuantity,
-    });
+    };
+
+    // เพิ่มข้อมูลการยืมใหม่ใน localStorage
+    addBorrowedItem(borrowData);
+
+    // ส่งข้อมูลไปที่ onConfirm (ครั้งเดียว)
+    onConfirm(borrowData);
+    onClose(); // ปิด dialog
+
+    isSubmitting.current = false;
   };
 
   return (
@@ -55,9 +74,9 @@ const BorrowDialog = ({ item, onClose, onConfirm }) => {
 
           <div className="item-details">
             <h3>{item.deviceName}</h3>
-            <p className="borrowername">ชื่อผู้ยืม: {borrowerName}</p>
-            <p className="category">หมวดหมู่: {item.category}</p>
-            <p className="available">จำนวนที่สามารถยืมได้: {maxQuantity} ชิ้น</p>
+            <p>ชื่อผู้ยืม: {borrowerName}</p>
+            <p>หมวดหมู่: {item.category}</p>
+            <p>จำนวนที่สามารถยืมได้: {maxQuantity} ชิ้น</p>
 
             <form onSubmit={handleSubmit}>
               <div className="quantity-control">
@@ -99,7 +118,7 @@ const BorrowDialog = ({ item, onClose, onConfirm }) => {
               </div>
 
               <div className="borrow-action-buttons">
-                <button type="button" className="borrow-cancel-btn" onClick={onClose}>
+                <button type="button" onClick={onClose} className="borrow-cancel-btn">
                   ยกเลิก
                 </button>
                 <button type="submit" className="borrow-confirm-btn">
