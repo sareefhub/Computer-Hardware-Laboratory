@@ -6,35 +6,33 @@ import Navbar from "../components/navbar";
 import { getCurrentUser } from "../helpers/helper";
 import "./borrow-confirm.css";
 
-// Function to get borrowed items from localStorage
 const getBorrowedItems = () => {
   return JSON.parse(localStorage.getItem("borrowedItems")) || [];
 };
 
-const BorrowConfirm = ({ onRemoveItem, onConfirmBorrow }) => {
+const BorrowConfirm = ({ onRemoveItem = () => {}, onConfirmBorrow = () => {} }) => {
   const [borrowedItems, setBorrowedItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
 
   useEffect(() => {
-    const currentUser = getCurrentUser(); // ดึงข้อมูล currentUser จาก localStorage
-
+    const currentUser = getCurrentUser();
     if (currentUser) {
-      const items = getBorrowedItems(); // Get borrowed items from localStorage
-      const filteredItems = items.filter(item => item.borrowerName === currentUser.username); // Filter by borrowerName
+      const items = getBorrowedItems();
+      const filteredItems = items.filter(item => item.borrowerName === currentUser.username);
       setBorrowedItems(filteredItems);
     }
-  }, []); // Empty dependency array to run only once when the component mounts
+  }, []);
 
   const handleSelectItem = (id) => {
     setSelectedItems((prevSelectedItems) => {
-      const newSelectedItems = prevSelectedItems.includes(id)
+      return prevSelectedItems.includes(id)
         ? prevSelectedItems.filter((itemId) => itemId !== id)
         : [...prevSelectedItems, id];
-      return newSelectedItems;
     });
   };
 
   const handleRemoveItem = (id) => {
+    console.log("onRemoveItem:", onRemoveItem);
     const updatedItems = borrowedItems.filter(item => item.id !== id);
     setBorrowedItems(updatedItems);
     localStorage.setItem("borrowedItems", JSON.stringify(updatedItems));
@@ -105,14 +103,13 @@ const BorrowConfirm = ({ onRemoveItem, onConfirmBorrow }) => {
                 )}
               </tbody>
             </table>
-
-            {borrowedItems.length > 0 ? (
+            {borrowedItems.length > 0 && (
               <div className="action-buttons">
                 <button onClick={handleConfirmBorrow} className="confirm-btn">
                   ยืนยันการยืม
                 </button>
               </div>
-            ) : null}
+            )}
           </div>
         </div>
       </div>
