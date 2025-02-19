@@ -4,23 +4,23 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Sidebar from "../components/sidebar";
 import Navbar from "../components/navbar";
 import { getCurrentUser } from "../helpers/helper";
+import { getBorrowedItems, deleteBorrowedItem } from "../api/borrowedItemsApi";  // เปลี่ยนจาก remove เป็น delete
 import "./borrow-confirm.css";
-
-const getBorrowedItems = () => {
-  return JSON.parse(localStorage.getItem("borrowedItems")) || [];
-};
 
 const BorrowConfirm = ({ onRemoveItem = () => {}, onConfirmBorrow = () => {} }) => {
   const [borrowedItems, setBorrowedItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
 
   useEffect(() => {
-    const currentUser = getCurrentUser();
-    if (currentUser) {
-      const items = getBorrowedItems();
-      const filteredItems = items.filter(item => item.borrowerName === currentUser.username);
-      setBorrowedItems(filteredItems);
-    }
+    const fetchData = async () => {
+      const currentUser = getCurrentUser();
+      if (currentUser) {
+        const items = await getBorrowedItems();
+        const filteredItems = items.filter(item => item.borrowerName === currentUser.username);
+        setBorrowedItems(filteredItems);
+      }
+    };
+    fetchData();
   }, []);
 
   const handleSelectItem = (id) => {
@@ -31,12 +31,12 @@ const BorrowConfirm = ({ onRemoveItem = () => {}, onConfirmBorrow = () => {} }) 
     });
   };
 
-  const handleRemoveItem = (id) => {
-    console.log("onRemoveItem:", onRemoveItem);
-    const updatedItems = borrowedItems.filter(item => item.id !== id);
-    setBorrowedItems(updatedItems);
-    localStorage.setItem("borrowedItems", JSON.stringify(updatedItems));
-    onRemoveItem(id);
+  const handleRemoveItem = async (id) => {
+    const success = await deleteBorrowedItem(id);  // ใช้ deleteBorrowedItem แทน removeBorrowedItem
+    if (success) {
+      setBorrowedItems(borrowedItems.filter(item => item.id !== id));
+      onRemoveItem(id);
+    }
   };
 
   const handleConfirmBorrow = () => {

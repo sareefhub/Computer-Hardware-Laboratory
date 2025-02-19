@@ -24,7 +24,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "nodemon --watch db.json --exec \"json-server db.json --port 3001\"",
+    "client": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -49,6 +51,9 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "concurrently": "^9.1.2",
+    "json-server": "^1.0.0-beta.3",
+    "nodemon": "^3.1.9",
     "purify-css": "^1.2.5",
     "source-map-loader": "^5.0.0"
   }

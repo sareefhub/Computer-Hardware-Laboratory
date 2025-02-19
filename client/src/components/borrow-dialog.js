@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { addBorrowedItem } from "../mockData/borrowedItemsData"; // ฟังก์ชันเพิ่มข้อมูลการยืม
+import { addBorrowedItem } from "../api/borrowedItemsApi"; // Import API function
 import "./borrow-dialog.css";
 
 const getCurrentUser = () => {
@@ -24,7 +24,7 @@ const BorrowDialog = ({ item, onClose, onConfirm }) => {
     }
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (isSubmitting.current) return;
@@ -47,12 +47,14 @@ const BorrowDialog = ({ item, onClose, onConfirm }) => {
       category: item.category,
     };
 
-    // เพิ่มข้อมูลการยืมใหม่ใน localStorage
-    addBorrowedItem(borrowData);
+    // เพิ่มข้อมูลการยืมใหม่ไปยัง json-server
+    await addBorrowedItem(borrowData);
 
     // ส่งข้อมูลไปที่ onConfirm (ครั้งเดียว)
     onConfirm(borrowData);
-    onClose(); // ปิด dialog
+
+    // ปิด dialog
+    onClose();
 
     isSubmitting.current = false;
   };
