@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import users from "../mockData/userData";
+import { setCurrentUser } from "../helpers/helper";
 import "./login.css";
 
 const Login = () => {
@@ -28,8 +29,7 @@ const Login = () => {
 
     if (user) {
       setError("");
-      const currentUser = { username: user.username, role: user.role };
-      localStorage.setItem("currentUser", JSON.stringify(currentUser));
+      setCurrentUser(user.username, user.role, user.studentId);
       if (user.role === "admin") {
         navigate("/dashboard");
       } else {
