@@ -4,7 +4,9 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Sidebar from "../components/sidebar";
 import Navbar from "../components/navbar";
 import { getCurrentUser } from "../helpers/helper";
-import { getBorrowedItems, deleteBorrowedItem } from "../api/borrowedItemsApi";  // เปลี่ยนจาก remove เป็น delete
+import { getBorrowedItems, deleteBorrowedItem } from "../api/borrowedItemsApi";
+import { getBorrowHistory } from "../api/borrowHistoryApi";
+import { addBorrowHistory } from "../api/borrowHistoryApi";
 import "./borrow-confirm.css";
 
 const BorrowConfirm = ({ onRemoveItem = () => {}, onConfirmBorrow = () => {} }) => {
@@ -24,24 +26,61 @@ const BorrowConfirm = ({ onRemoveItem = () => {}, onConfirmBorrow = () => {} }) 
   }, []);
 
   const handleSelectItem = (id) => {
-    setSelectedItems((prevSelectedItems) => {
-      return prevSelectedItems.includes(id)
+    setSelectedItems((prevSelectedItems) => 
+      prevSelectedItems.includes(id)
         ? prevSelectedItems.filter((itemId) => itemId !== id)
-        : [...prevSelectedItems, id];
-    });
+        : [...prevSelectedItems, id]
+    );
   };
 
   const handleRemoveItem = async (id) => {
-    const success = await deleteBorrowedItem(id);  // ใช้ deleteBorrowedItem แทน removeBorrowedItem
+    const success = await deleteBorrowedItem(id);
     if (success) {
-      setBorrowedItems(borrowedItems.filter(item => item.id !== id));
+      setBorrowedItems((prevItems) => prevItems.filter(item => item.id !== id));
       onRemoveItem(id);
     }
   };
 
-  const handleConfirmBorrow = () => {
-    const confirmedItems = borrowedItems.filter((item) => selectedItems.includes(item.id));
-    onConfirmBorrow(confirmedItems);
+  const handleConfirmBorrow = async () => {
+    if (selectedItems.length === 0) {
+      alert("⚠️ กรุณาเลือกอุปกรณ์ที่ต้องการยืนยัน!");
+      return;
+    }
+
+    console.log("Selected Items: ", selectedItems);  // ดีบั๊กเพื่อดูค่า selectedItems
+
+    const currentUser = getCurrentUser();
+    const confirmedItems = borrowedItems.filter(item => selectedItems.includes(item.id));
+
+    try {
+      // ดึงประวัติการยืมทั้งหมดของผู้ใช้
+      const borrowHistory = await getBorrowHistory();
+      console.log("Borrow History: ", borrowHistory);  // ดีบั๊กเพื่อดูข้อมูลจาก API
+
+      const userHistory = borrowHistory.filter(item => item.username === currentUser.username);
+      const serialNumber = userHistory.length + 1;  // เพิ่ม 1 สำหรับการยืมครั้งถัดไป
+
+      for (const item of confirmedItems) {
+        const historyEntry = {
+          ...item,
+          serialNumber: `${currentUser.username}-${serialNumber}`,
+          borrowDate: new Date().toISOString(),
+          username: currentUser.username,
+        };
+
+        await addBorrowHistory(historyEntry);  // 📌 บันทึกประวัติการยืม
+        await deleteBorrowedItem(item.id); // 📌 ลบออกจาก borrowedItems
+      }
+
+      // อัปเดต UI
+      setBorrowedItems((prevItems) => prevItems.filter(item => !selectedItems.includes(item.id)));
+      setSelectedItems([]);
+      onConfirmBorrow(confirmedItems);
+
+      alert("✅ ยืนยันการยืมเรียบร้อยแล้ว!");
+    } catch (error) {
+      console.error("❌ Error confirming borrow:", error);
+    }
   };
 
   return (

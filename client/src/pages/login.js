@@ -4,7 +4,7 @@ import users from "../mockData/userData";
 import "./login.css";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -12,14 +12,18 @@ const Login = () => {
   useEffect(() => {
     const savedUser = JSON.parse(localStorage.getItem("currentUser"));
     if (savedUser) {
-      setUsername(savedUser.username);
+      setIdentifier(savedUser.username);
     }
   }, []);
 
   const handleLogin = (e) => {
     e.preventDefault();
     const user = users.find(
-      (user) => user.username === username && user.password === password
+      (user) =>
+        (user.username === identifier || 
+         user.email === identifier || 
+         user.studentId === identifier) &&
+        user.password === password
     );
 
     if (user) {
@@ -32,7 +36,7 @@ const Login = () => {
         navigate("/hardware-list");
       }
     } else {
-      setError("Invalid username or password");
+      setError("Invalid username, email, student ID, or password");
     }
   };
 
@@ -43,13 +47,13 @@ const Login = () => {
           <h2>Login</h2>
           {error && <p className="error-message">{error}</p>}
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="identifier">Username / Email / Student ID</label>
             <input
               type="text"
-              id="username"
-              placeholder="Enter your username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              id="identifier"
+              placeholder="Enter your username, email, or student ID"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
               required
             />
           </div>

@@ -1,15 +1,4 @@
 {
-  "borrowedItems": [
-    {
-      "id": 1,
-      "borrowerName": "user1",
-      "borrowQuantity": 1,
-      "borrowDate": "2/19/2025",
-      "borrowTime": "1:38:47 PM",
-      "returnDate": "2/26/2025",
-      "subject": "Lab",
-      "deviceName": "Arduino Uno",
-      "category": "Microcontroller"
-    }
-  ]
+  "borrowedItems": [],
+  "borrowHistory": []
 }
