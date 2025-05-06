@@ -115,6 +115,8 @@
 }
 
 .hardware-list-btn {
+  width: 100%;
+  height: 40px;
   padding: 10px 20px;
   font-size: 1rem;
   border: none;
@@ -124,9 +126,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
   gap: 0.5rem;
-  width: auto;
-  height: auto;
 }
 
 .hardware-list-btn-success {

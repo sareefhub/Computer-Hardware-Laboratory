@@ -59,15 +59,23 @@ const BorrowingHistory = () => {
               </table>
             </div>
             <div className="borrow-history-pagination">
-              <button onClick={() => handlePageChange('prev')} disabled={currentPage === 1}>
-                Previous
-              </button>
-              <span>
-                Page {currentPage} of {totalPages}
-              </span>
-              <button onClick={() => handlePageChange('next')} disabled={currentPage === totalPages}>
-                Next
-              </button>
+              <button 
+                  className="borrow-history-pagination-button" 
+                  onClick={() => handlePageChange("prev")} 
+                  disabled={currentPage === 1}
+                >
+                  ก่อนหน้า
+                </button>
+                <span>
+                  หน้า {currentPage} จาก {totalPages}
+                </span>
+                <button 
+                  className="borrow-history-pagination-button" 
+                  onClick={() => handlePageChange("next")} 
+                  disabled={currentPage === totalPages}
+                >
+                  ถัดไป
+                </button>
             </div>
           </div>
         </div>
