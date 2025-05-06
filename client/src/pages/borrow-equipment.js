@@ -40,86 +40,98 @@ const BorrowEquipment = () => {
   };
 
   return (
-    <div className="page">
-      <Sidebar />
-      <div className="content">
+    <div className="borrow-equipment-page">
+      <div className="borrow-equipment-navbar">
         <Navbar />
-        <div className="content-page">
-          <div className="content-header">
-            <h2 className="page-title">ยืมอุปกรณ์</h2>
-            <p>จำนวนอุปกรณ์ทั้งหมด: {filteredData.length} รายการ</p>
-            <div className="category-filter">
-              <label htmlFor="category-dropdown">หมวดหมู่:</label>
-              <select id="category-dropdown" value={selectedCategory} onChange={handleCategoryChange}>
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
+      </div>
+      <div className="borrow-equipment-body">
+        <div className="borrow-equipment-sidebar">
+          <Sidebar />
+        </div>
+        <div className="borrow-equipment-content">
+          <div className="borrow-equipment-content-page">
+            <div className="borrow-equipment-content-header">
+              <h2 className="borrow-equipment-title">ยืมอุปกรณ์</h2>
+              <p>จำนวนอุปกรณ์ทั้งหมด: {filteredData.length} รายการ</p>
+              <div className="borrow-equipment-category-filter">
+                <label htmlFor="category-dropdown">หมวดหมู่:</label>
+                <select id="category-dropdown" value={selectedCategory} onChange={handleCategoryChange}>
+                  {categories.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-          </div>
-          <div className="content-table">
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>หมวดหมู่</th>
-                  <th>ชื่ออุปกรณ์</th>
-                  <th>จำนวนทั้งหมด</th>
-                  <th>จำนวนที่เหลือ</th>
-                  <th>ราคา/หน่วย</th>
-                  <th>ยืม</th>
-                  {role !== "user" && <th>การจัดการ</th>}
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedData.map((item, index) => (
-                  <tr key={item.id}>
-                    <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                    <td>{item.category}</td>
-                    <td>{item.deviceName}</td>
-                    <td>{item.totalQuantity}</td>
-                    <td>{item.totalQuantity - item.borrowedQuantity}</td>
-                    <td>{item.pricePerUnit} บาท</td>
-                    <td>
-                      <button className="btn btn-success" onClick={() => handleBorrow(item)}>
-                        <FontAwesomeIcon icon={faHandHolding} /> ยืม
-                      </button>
-                    </td>
-                    {role !== "user" && (
-                      <td>
-                        <div className="actions-container">
-                          <button className="btn btn-warning">
-                            <FontAwesomeIcon icon={faEdit} />
-                          </button>
-                          <button className="btn btn-danger">
-                            <FontAwesomeIcon icon={faTrash} />
-                          </button>
-                        </div>
-                      </td>
-                    )}
+            <div className="borrow-equipment-content-table">
+              <table className="borrow-equipment-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>หมวดหมู่</th>
+                    <th>ชื่ออุปกรณ์</th>
+                    <th>จำนวนทั้งหมด</th>
+                    <th>จำนวนที่เหลือ</th>
+                    <th>ราคา/หน่วย</th>
+                    <th>ยืม</th>
+                    {role !== "user" && <th>การจัดการ</th>}
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="pagination">
-            <button onClick={() => handlePageChange("prev")} disabled={currentPage === 1}>
-              ก่อนหน้า
-            </button>
-            <span>
-              หน้า {currentPage} จาก {totalPages}
-            </span>
-            <button onClick={() => handlePageChange("next")} disabled={currentPage === totalPages}>
-              ถัดไป
-            </button>
+                </thead>
+                <tbody>
+                  {paginatedData.map((item, index) => (
+                    <tr key={item.id}>
+                      <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                      <td>{item.category}</td>
+                      <td>{item.deviceName}</td>
+                      <td>{item.totalQuantity}</td>
+                      <td>{item.totalQuantity - item.borrowedQuantity}</td>
+                      <td>{item.pricePerUnit} บาท</td>
+                      <td>
+                        <button className="borrow-equipment-btn borrow-equipment-btn-success" onClick={() => handleBorrow(item)}>
+                          <FontAwesomeIcon icon={faHandHolding} /> ยืม
+                        </button>
+                      </td>
+                      {role !== "user" && (
+                        <td>
+                          <div className="borrow-equipment-actions-container">
+                            <button className="borrow-equipment-btn borrow-equipment-btn-warning">
+                              <FontAwesomeIcon icon={faEdit} />
+                            </button>
+                            <button className="borrow-equipment-btn borrow-equipment-btn-danger">
+                              <FontAwesomeIcon icon={faTrash} />
+                            </button>
+                          </div>
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="borrow-equipment-pagination">
+              <button 
+                className="borrow-equipment-pagination-button" 
+                onClick={() => handlePageChange("prev")} 
+                disabled={currentPage === 1}
+              >
+                ก่อนหน้า
+              </button>
+              <span>
+                หน้า {currentPage} จาก {totalPages}
+              </span>
+              <button 
+                className="borrow-equipment-pagination-button" 
+                onClick={() => handlePageChange("next")} 
+                disabled={currentPage === totalPages}
+              >
+                ถัดไป
+              </button>
+            </div>
           </div>
         </div>
       </div>
-      {selectedItem && (
-        <BorrowDialog item={selectedItem} onClose={() => setSelectedItem(null)} onConfirm={() => {}} />
-      )}
+      {selectedItem && <BorrowDialog item={selectedItem} onClose={() => setSelectedItem(null)} onConfirm={() => {}} />}
     </div>
   );
 };

@@ -37,7 +37,6 @@
   flex: 1;
   background: #ffffff;
   min-height: 100%;
-  padding: 1rem;
   overflow: auto;
 }
 
@@ -116,16 +115,17 @@
 }
 
 .hardware-list-btn {
-  padding: 0.5rem;
+  width: 100%;
+  padding: 12px 20px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
-  gap: 0.5rem;
+  font-size: 1rem;
+  gap: 1rem;
 }
 
 .hardware-list-btn-success {
@@ -185,19 +185,19 @@
 }
 
 .hardware-list-btn-edit {
-  background: #fef3c7;
-  color: #92400e;
+  background: #fff27d;
+  color: #c46a2f;
 }
 
 .hardware-list-btn-edit:hover {
-  background: #47463f;
+  background: #ffeb3b;
 }
 
 .hardware-list-btn-delete {
-  background: #fee2e2;
-  color: #991b1b;
+  background: #f79c9c;
+  color: #9e3535;
 }
 
 .hardware-list-btn-delete:hover {
-  background: #fecaca;
+  background: #f06262;
 }

@@ -76,7 +76,7 @@ const HardwareList = () => {
                       <td>{item.totalQuantity - item.borrowedQuantity}</td>
                       <td>{item.pricePerUnit} บาท</td>
                       <td>
-                        <button className="hardware-list-btn hardware-list-btn-success view-details-btn" onClick={() => handleViewDetails(item.id)}>
+                        <button className="hardware-list-btn hardware-list-btn-success" onClick={() => handleViewDetails(item.id)}>
                           <FontAwesomeIcon icon={faEye} /> ดูรายละเอียด
                         </button>
                       </td>
