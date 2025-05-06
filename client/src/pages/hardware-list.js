@@ -83,10 +83,10 @@ const HardwareList = () => {
                       {role !== 'user' && (
                         <td>
                           <div className="hardware-list-actions-cell">
-                          <button className="hardware-list-btn-edit-delete hardware-list-btn-edit">
+                          <button className="hardware-list-btn hardware-list-btn-edit">
                             <FontAwesomeIcon icon={faEdit} />
                           </button>
-                          <button className="hardware-list-btn-edit-delete hardware-list-btn-delete">
+                          <button className="hardware-list-btn hardware-list-btn-delete">
                             <FontAwesomeIcon icon={faTrash} />
                           </button>
                           </div>

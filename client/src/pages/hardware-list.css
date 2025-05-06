@@ -184,18 +184,6 @@
   justify-content: center;
 }
 
-.hardware-list-btn-edit-delete {
-  width: 42px;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
 .hardware-list-btn-edit {
   background-color: #ffc107;
   color: black;

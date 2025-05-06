@@ -17,44 +17,58 @@ const BorrowingHistory = () => {
     setCurrentPage(prevPage => direction === 'next' ? Math.min(prevPage + 1, totalPages) : Math.max(prevPage - 1, 1));
 
   return (
-    <div className="page">
-      <Sidebar />
-      <div className="content">
+    <div className="borrow-equipment-page">
+      <div className="borrow-equipment-navbar">
         <Navbar />
-        <div className="content-page">
-          <div className="content-header">
-            <h2 className="page-title">Borrowing History</h2>
-          </div>
-          <div className="content-table">
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th><th>Category</th><th>Device Name</th>
-                  <th>Borrowed<br />Quantity</th><th>Borrow Date</th><th>Return Date</th><th>Borrower</th><th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedData.map((item, index) => (
-                  <tr key={item.id}>
-                    <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                    <td>{item.category}</td>
-                    <td>{item.deviceName}</td>
-                    <td>{item.borrowedQuantity}</td>
-                    <td>{item.borrowDate ? new Date(item.borrowDate).toLocaleDateString() : 'N/A'}</td>
-                    <td>{item.returnDate ? new Date(item.returnDate).toLocaleDateString() : 'N/A'}</td>
-                    <td>{item.borrower || 'N/A'}</td>
-                    <td>
-                      <button className="btn btn-danger"><FontAwesomeIcon icon={faTrash} /></button>
-                    </td>
+      </div>
+      <div className="borrow-equipment-body">
+        <div className="borrow-equipment-sidebar">
+          <Sidebar />
+        </div>
+        <div className="borrow-equipment-content">
+          <div className="borrow-equipment-content-page">
+            <div className="borrow-equipment-content-header">
+              <h2 className="borrow-equipment-title">Borrowing History</h2>
+            </div>
+            <div className="borrow-equipment-content-table">
+              <table className="borrow-equipment-table">
+                <thead>
+                  <tr>
+                    <th>#</th><th>Category</th><th>Device Name</th>
+                    <th>Borrowed<br />Quantity</th><th>Borrow Date</th><th>Return Date</th><th>Borrower</th><th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="pagination">
-            <button onClick={() => handlePageChange('prev')} disabled={currentPage === 1}>Previous</button>
-            <span>Page {currentPage} of {totalPages}</span>
-            <button onClick={() => handlePageChange('next')} disabled={currentPage === totalPages}>Next</button>
+                </thead>
+                <tbody>
+                  {paginatedData.map((item, index) => (
+                    <tr key={item.id}>
+                      <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                      <td>{item.category}</td>
+                      <td>{item.deviceName}</td>
+                      <td>{item.borrowedQuantity}</td>
+                      <td>{item.borrowDate ? new Date(item.borrowDate).toLocaleDateString() : 'N/A'}</td>
+                      <td>{item.returnDate ? new Date(item.returnDate).toLocaleDateString() : 'N/A'}</td>
+                      <td>{item.borrower || 'N/A'}</td>
+                      <td>
+                        <button className="borrow-equipment-btn borrow-equipment-btn-danger">
+                          <FontAwesomeIcon icon={faTrash} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="borrow-equipment-pagination">
+              <button onClick={() => handlePageChange('prev')} disabled={currentPage === 1}>
+                Previous
+              </button>
+              <span>
+                Page {currentPage} of {totalPages}
+              </span>
+              <button onClick={() => handlePageChange('next')} disabled={currentPage === totalPages}>
+                Next
+              </button>
+            </div>
           </div>
         </div>
       </div>

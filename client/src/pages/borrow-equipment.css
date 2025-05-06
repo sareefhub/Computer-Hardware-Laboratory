@@ -190,20 +190,8 @@
     display: flex;
     gap: 0.5rem;
     justify-content: center;
-  }
+}
 
-.borrow-equipment-btn-edit-delete {
-    width: 42px;
-    height: 42px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  
 .borrow-equipment-btn-edit {
     background-color: #ffc107;
     color: black;

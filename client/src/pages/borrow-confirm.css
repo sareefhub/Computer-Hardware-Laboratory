@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap");
 
 * {
   margin: 0;
@@ -7,70 +7,108 @@
   font-family: "Kanit", Arial, sans-serif;
 }
 
-.page {
-  display: flex;
+.borrow-confirm-page {
+  width: 100%;
   min-height: 100vh;
-  background-color: #f8f9fa;
-}
-
-.content {
-  flex: 1;
-  padding: 20px;
-}
-
-.content-page {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.back-btn {
-  display: inline-flex;
-  align-items: center;
-  background: none;
-  border: none;
-  color: #666;
-  cursor: pointer;
-  font-size: 0.9rem;
-  margin-bottom: 20px;
-  padding: 8px 12px;
-  transition: all 0.3s ease;
-}
-
-.back-btn:hover {
-  color: #333;
-  background-color: #f1f3f5;
-  border-radius: 4px;
-}
-
-.back-btn .icon {
-  margin-right: 8px;
-}
-
-h1 {
-  font-size: 1.8rem;
-  color: #333;
-  margin-bottom: 24px;
-}
-
-.action-buttons {
+  background: #f4f7fc;
   display: flex;
-  justify-content: center;
-  margin-top: 24px;
+  flex-direction: column;
 }
 
-.confirm-btn {
-  padding: 10px 20px;
+.borrow-confirm-navbar {
+  width: 100%;
+  z-index: 1000;
+}
+
+.borrow-confirm-body {
+  display: flex;
+  flex: 1;
+  min-height: calc(100vh - 60px);
+}
+
+.borrow-confirm-sidebar {
+  background-color: #ffffff;
+  border-right: 1px solid #eee;
+  min-height: 100%;
+  flex-shrink: 0; /* Prevent sidebar from shrinking */
+}
+
+.borrow-confirm-content {
+  flex: 1;
+  background: #ffffff;
+  min-height: 100%;
+  padding: 20px;
+}
+
+.borrow-confirm-content-page {
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.borrow-confirm-content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.borrow-confirm-page-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.borrow-confirm-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.borrow-confirm-table th,
+.borrow-confirm-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+.borrow-confirm-table th {
+  background: #f8fafc;
+  text-align: center;
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.borrow-confirm-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.borrow-confirm-btn-danger {
+  padding: 12px 20px;
+  background-color: #dc3545;
+  color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.borrow-confirm-btn-danger:hover {
+  background-color: #c82333;
+}
+
+.borrow-confirm-btn-success {
+  padding: 12px 20px;
   background-color: #28a745;
   color: white;
-  transition: all 0.3s ease;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.confirm-btn:hover {
+.borrow-confirm-btn-success:hover {
   background-color: #218838;
 }
 
@@ -81,14 +119,19 @@ h1 {
   margin-top: 24px;
 }
 
-@media (max-width: 768px) {
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
 
+@media (max-width: 768px) {
   .action-buttons {
     flex-direction: column;
     gap: 12px;
   }
 
-  .confirm-btn {
+  .borrow-confirm-btn-success {
     width: 100%;
   }
 }

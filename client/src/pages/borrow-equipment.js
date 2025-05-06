@@ -95,10 +95,10 @@ const BorrowEquipment = () => {
                       {role !== "user" && (
                         <td>
                           <div className="borrow-equipment-actions-cell">
-                            <button className="borrow-equipment-btn-edit-delete borrow-equipment-btn-edit">
+                            <button className="borrow-equipment-btn borrow-equipment-btn-edit">
                               <FontAwesomeIcon icon={faEdit} />
                             </button>
-                            <button className="borrow-equipment-btn-edit-delete borrow-equipment-btn-delete">
+                            <button className="borrow-equipment-btn borrow-equipment-btn-delete">
                               <FontAwesomeIcon icon={faTrash} />
                             </button>
                           </div>
