@@ -129,12 +129,12 @@
 }
 
 .hardware-list-btn-success {
-  background: #dcfce7;
-  color: #166534;
+  background: #0ba30b;
+  color: white;
 }
 
 .hardware-list-btn-success:hover {
-  background: #bbf7d0;
+  background-color: green;
 }
 
 .hardware-list-pagination {
@@ -184,20 +184,32 @@
   justify-content: center;
 }
 
+.hardware-list-btn-edit-delete {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
 .hardware-list-btn-edit {
-  background: #fff27d;
-  color: #c46a2f;
+  background-color: #ffc107;
+  color: black;
 }
 
 .hardware-list-btn-edit:hover {
-  background: #ffeb3b;
+  background-color: #e0a800;
 }
 
 .hardware-list-btn-delete {
-  background: #f79c9c;
-  color: #9e3535;
+  background-color: #dc3545;
+  color: white;
 }
 
 .hardware-list-btn-delete:hover {
-  background: #f06262;
+  background-color: #c82333;
 }

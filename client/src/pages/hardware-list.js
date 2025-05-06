@@ -18,7 +18,7 @@ const HardwareList = () => {
   const currentUser = getCurrentUser();  
   const { role } = currentUser || {};    // ดึงบทบาท (admin/user)
 
-  const itemsPerPage = 5;  // จำนวนรายการที่แสดงในแต่ละหน้า
+  const itemsPerPage = 10;  // จำนวนรายการที่แสดงในแต่ละหน้า
   const categories = ['ทั้งหมด', ...new Set(hardwareData.map(item => item.category))];  // การกรองหมวดหมู่จากข้อมูล
   const filteredData = selectedCategory === 'ทั้งหมด' ? hardwareData : hardwareData.filter(item => item.category === selectedCategory); // การกรองข้อมูลตามหมวดหมู่ที่เลือก
   const totalPages = Math.ceil(filteredData.length / itemsPerPage); // คำนวณจำนวนหน้า
@@ -83,10 +83,10 @@ const HardwareList = () => {
                       {role !== 'user' && (
                         <td>
                           <div className="hardware-list-actions-cell">
-                          <button className="hardware-list-btn hardware-list-btn-edit">
+                          <button className="hardware-list-btn-edit-delete hardware-list-btn-edit">
                             <FontAwesomeIcon icon={faEdit} />
                           </button>
-                          <button className="hardware-list-btn hardware-list-btn-delete">
+                          <button className="hardware-list-btn-edit-delete hardware-list-btn-delete">
                             <FontAwesomeIcon icon={faTrash} />
                           </button>
                           </div>

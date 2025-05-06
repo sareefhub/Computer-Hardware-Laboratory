@@ -16,7 +16,7 @@ const BorrowEquipment = () => {
   const currentUser = getCurrentUser();
   const { role } = currentUser || {};
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
   const categories = ["ทั้งหมด", ...new Set(hardwareData.map((item) => item.category))];
   const filteredData =
     selectedCategory === "ทั้งหมด" ? hardwareData : hardwareData.filter((item) => item.category === selectedCategory);
@@ -94,11 +94,11 @@ const BorrowEquipment = () => {
                       </td>
                       {role !== "user" && (
                         <td>
-                          <div className="borrow-equipment-actions-container">
-                            <button className="borrow-equipment-btn borrow-equipment-btn-warning">
+                          <div className="borrow-equipment-actions-cell">
+                            <button className="borrow-equipment-btn-edit-delete borrow-equipment-btn-edit">
                               <FontAwesomeIcon icon={faEdit} />
                             </button>
-                            <button className="borrow-equipment-btn borrow-equipment-btn-danger">
+                            <button className="borrow-equipment-btn-edit-delete borrow-equipment-btn-delete">
                               <FontAwesomeIcon icon={faTrash} />
                             </button>
                           </div>
