@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import Sidebar from '../components/sidebar';
-import Navbar from '../components/navbar';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import './borrowing-history.css';
-import hardwareData from '../mockData/hardwareData';
+import { useState } from "react";
+import Sidebar from "../components/sidebar";
+import Navbar from "../components/navbar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import "./borrowing-history.css";
+import hardwareData from "../mockData/hardwareData";
 
 const BorrowingHistory = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,21 +17,21 @@ const BorrowingHistory = () => {
     setCurrentPage(prevPage => direction === 'next' ? Math.min(prevPage + 1, totalPages) : Math.max(prevPage - 1, 1));
 
   return (
-    <div className="borrow-equipment-page">
-      <div className="borrow-equipment-navbar">
+    <div className="borrow-history-page">
+      <div className="borrow-history-navbar">
         <Navbar />
       </div>
-      <div className="borrow-equipment-body">
-        <div className="borrow-equipment-sidebar">
+      <div className="borrow-history-body">
+        <div className="borrow-history-sidebar">
           <Sidebar />
         </div>
-        <div className="borrow-equipment-content">
-          <div className="borrow-equipment-content-page">
-            <div className="borrow-equipment-content-header">
-              <h2 className="borrow-equipment-title">Borrowing History</h2>
+        <div className="borrow-history-content">
+          <div className="borrow-history-content-page">
+            <div className="borrow-history-content-header">
+              <h2 className="borrow-history-title">Borrowing History</h2>
             </div>
-            <div className="borrow-equipment-content-table">
-              <table className="borrow-equipment-table">
+            <div className="borrow-history-content-table">
+              <table className="borrow-history-table">
                 <thead>
                   <tr>
                     <th>#</th><th>Category</th><th>Device Name</th>
@@ -49,7 +49,7 @@ const BorrowingHistory = () => {
                       <td>{item.returnDate ? new Date(item.returnDate).toLocaleDateString() : 'N/A'}</td>
                       <td>{item.borrower || 'N/A'}</td>
                       <td>
-                        <button className="borrow-equipment-btn borrow-equipment-btn-danger">
+                        <button className="borrow-history-btn borrow-history-btn-danger">
                           <FontAwesomeIcon icon={faTrash} />
                         </button>
                       </td>
@@ -58,7 +58,7 @@ const BorrowingHistory = () => {
                 </tbody>
               </table>
             </div>
-            <div className="borrow-equipment-pagination">
+            <div className="borrow-history-pagination">
               <button onClick={() => handlePageChange('prev')} disabled={currentPage === 1}>
                 Previous
               </button>

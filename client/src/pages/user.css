@@ -149,15 +149,18 @@
 }
 
 .user-btn {
-  width: 42px;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 10px 20px;
+  font-size: 1rem;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: auto;
+  height: auto;
 }
 
 .user-btn-warning {
