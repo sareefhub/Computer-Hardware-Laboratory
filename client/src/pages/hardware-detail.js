@@ -1,13 +1,13 @@
-import { useParams } from "react-router-dom"
-import { FileText, Youtube, ImageIcon } from 'lucide-react'
-import hardwareData from "../mockData/hardwareData"
-import Sidebar from "../components/sidebar"
-import Navbar from "../components/navbar"
-import "./hardware-detail.css"
+import { useParams } from "react-router-dom";
+import { FileText, Youtube, ImageIcon } from 'lucide-react';
+import hardwareData from "../mockData/hardwareData";
+import Sidebar from "../components/sidebar";
+import Navbar from "../components/navbar";
+import "./hardware-detail.css";
 
 const HardwareDetail = () => {
-  const { id } = useParams()
-  const hardware = hardwareData.find((item) => item.id === Number.parseInt(id))
+  const { id } = useParams();
+  const hardware = hardwareData.find((item) => item.id === Number.parseInt(id));
 
   // ข้อมูลตัวอย่าง - ในระบบจริง ควรดึงข้อมูลจากฐานข้อมูล
   const sampleHardware = {
@@ -22,52 +22,56 @@ const HardwareDetail = () => {
       name: "Arduino_UNO_Datasheet.pdf",
       size: "2.4 MB"
     }
-  }
+  };
 
   if (!hardware) {
     return (
-      <div className="not-found">
+      <div className="hardware-detail-not-found">
         <h2>ไม่พบอุปกรณ์!</h2>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="page">
-      <Sidebar />
-      <div className="content">
+    <div className="hardware-detail-page">
+      <div className="hardware-detail-navbar">
         <Navbar />
-        <div className="content-page">
-          <div className="hardware-detail">
-            {/* ปุ่มย้อนกลับ */}
-            <button onClick={() => window.history.back()} className="back-btn">
-              ← กลับ
-            </button>
-
-            <div className="hardware-content">
-              {/* ส่วนเนื้อหาหลัก */}
-              <div className="main-content">
+      </div>
+      <div className="hardware-detail-body">
+        <div className="hardware-detail-sidebar">
+          <Sidebar />
+        </div>
+        <div className="hardware-detail-content">
+          <div className="hardware-detail-content-page">
+            <div className="hardware-detail-header">
+              <h2 className="hardware-detail-title">รายละเอียดอุปกรณ์</h2>
+              <button className="hardware-detail-back-btn" onClick={() => window.history.back()}>
+                ← กลับ
+              </button>
+            </div>
+            <div className="hardware-detail-wrapper">
+              <div className="hardware-detail-content-main">
                 {/* ข้อมูลอุปกรณ์ */}
-                <div className="hardware-info">
+                <div className="hardware-detail-info">
                   <h2>{hardware.deviceName}</h2>
-                  <div className="info-grid">
-                    <div className="info-item">
+                  <div className="hardware-info-grid">
+                    <div className="hardware-info-item">
                       <label>หมวดหมู่:</label>
                       <span>{hardware.category}</span>
                     </div>
-                    <div className="info-item">
+                    <div className="hardware-info-item">
                       <label>จำนวนทั้งหมด:</label>
                       <span>{hardware.totalQuantity}</span>
                     </div>
-                    <div className="info-item">
+                    <div className="hardware-info-item">
                       <label>จำนวนที่ถูกยืม:</label>
                       <span>{hardware.borrowedQuantity}</span>
                     </div>
-                    <div className="info-item">
+                    <div className="hardware-info-item">
                       <label>จำนวนคงเหลือ:</label>
                       <span>{hardware.totalQuantity - hardware.borrowedQuantity}</span>
                     </div>
-                    <div className="info-item">
+                    <div className="hardware-info-item">
                       <label>ราคาต่อหน่วย:</label>
                       <span>{hardware.pricePerUnit.toFixed(2)} บาท</span>
                     </div>
@@ -75,18 +79,18 @@ const HardwareDetail = () => {
                 </div>
 
                 {/* รูปภาพอุปกรณ์ */}
-                <div className="hardware-images">
-                  <div className="section-header">
-                    <ImageIcon className="section-icon" />
+                <div className="hardware-detail-images">
+                  <div className="hardware-section-header">
+                    <ImageIcon className="hardware-section-icon" />
                     <h3>รูปภาพอุปกรณ์</h3>
                   </div>
-                  <div className="image-grid">
+                  <div className="hardware-image-grid">
                     {sampleHardware.images.map((img, index) => (
                       <img
                         key={index}
                         src={img || "/placeholder.svg"}
                         alt={`${hardware.deviceName} รูปที่ ${index + 1}`}
-                        className="device-image"
+                        className="hardware-device-image"
                       />
                     ))}
                   </div>
@@ -94,35 +98,35 @@ const HardwareDetail = () => {
               </div>
 
               {/* ส่วนข้อมูลด้านข้าง */}
-              <div className="side-content">
-                {/* ส่วน Datasheet */}
+              <div className="hardware-detail-side-content">
+                {/* Datasheet */}
                 {sampleHardware.datasheet && (
-                  <div className="datasheet-section">
-                    <div className="section-header">
-                      <FileText className="section-icon" />
+                  <div className="hardware-datasheet-section">
+                    <div className="hardware-section-header">
+                      <FileText className="hardware-section-icon" />
                       <h3>เอกสาร Datasheet</h3>
                     </div>
-                    <div className="datasheet-content">
-                      <div className="datasheet-info">
-                        <span className="datasheet-name">{sampleHardware.datasheet.name}</span>
-                        <span className="datasheet-size">{sampleHardware.datasheet.size}</span>
+                    <div className="hardware-datasheet-content">
+                      <div className="hardware-datasheet-info">
+                        <span className="hardware-datasheet-name">{sampleHardware.datasheet.name}</span>
+                        <span className="hardware-datasheet-size">{sampleHardware.datasheet.size}</span>
                       </div>
-                      <a href={sampleHardware.datasheet.url} className="download-btn" target="_blank" rel="noopener noreferrer">
+                      <a href={sampleHardware.datasheet.url} className="hardware-download-btn" target="_blank" rel="noopener noreferrer">
                         ดาวน์โหลด
                       </a>
                     </div>
                   </div>
                 )}
 
-                {/* ส่วนวิดีโอแนะนำการใช้งาน */}
+                {/* Tutorial Section */}
                 {sampleHardware.tutorial && (
-                  <div className="tutorial-section">
-                    <div className="section-header">
-                      <Youtube className="section-icon" />
+                  <div className="hardware-tutorial-section">
+                    <div className="hardware-section-header">
+                      <Youtube className="hardware-section-icon" />
                       <h3>วิดีโอแนะนำการใช้งาน</h3>
                     </div>
                     {sampleHardware.tutorial.videoUrl && (
-                      <div className="video-container">
+                      <div className="hardware-video-container">
                         <iframe
                           src={sampleHardware.tutorial.videoUrl}
                           title="วิดีโอแนะนำการใช้งาน"
@@ -132,7 +136,7 @@ const HardwareDetail = () => {
                         ></iframe>
                       </div>
                     )}
-                    <p className="tutorial-description">
+                    <p className="hardware-tutorial-description">
                       {sampleHardware.tutorial.description}
                     </p>
                   </div>
@@ -143,8 +147,7 @@ const HardwareDetail = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default HardwareDetail
-  
+export default HardwareDetail;

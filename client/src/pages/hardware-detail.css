@@ -1,40 +1,56 @@
-@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap");
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Kanit", Arial, sans-serif;
-}
-
-.page {
-  display: flex;
+.hardware-detail-page {
+  width: 100%;
   min-height: 100vh;
-  background-color: #f8f9fa;
+  background: #f4f7fc;
+  display: flex;
+  flex-direction: column;
 }
 
-.content {
+.hardware-detail-navbar {
+  width: 100%;
+  z-index: 1000;
+}
+
+.hardware-detail-body {
+  display: flex;
   flex: 1;
-  padding: 20px;
+  min-height: calc(100vh - 60px);
 }
 
-.content-page {
+.hardware-detail-sidebar {
+  background-color: #ffffff;
+  border-right: 1px solid #eee;
+  min-height: 100%;
+  flex-shrink: 0;
+}
+
+.hardware-detail-content {
+  flex: 1;
+  background: #ffffff;
+  min-height: 100%;
   padding: 20px;
-  max-width: 1400px;
-  margin: 0 auto;
-  height: calc(100vh - 100px);
   overflow-y: auto;
 }
 
-.hardware-detail {
-  width: 100%;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 24px;
+.hardware-detail-content-page {
+  margin: 0 auto;
+  padding: 2rem;
 }
 
-.back-btn {
+.hardware-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.hardware-detail-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.hardware-detail-back-btn {
   background-color: #f8f9fa;
   border: none;
   padding: 8px 16px;
@@ -42,50 +58,50 @@
   color: #666;
   cursor: pointer;
   font-size: 0.9rem;
-  margin-bottom: 20px;
   transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
   gap: 8px;
 }
 
-.back-btn:hover {
+.hardware-detail-back-btn:hover {
   background-color: #e9ecef;
   color: #333;
 }
 
-.hardware-content {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
+.hardware-detail-wrapper {
+  display: flex;
   gap: 24px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: stretch; 
 }
 
-/* Main Content Styles */
-.main-content {
+/* Flexbox to align content */
+.hardware-detail-content-main {
+  flex-grow: 1;
+  flex-shrink: 1;
   display: flex;
   flex-direction: column;
-  gap: 24px;
-}
-
-.hardware-info {
+  justify-content: space-between;
   background-color: #f8f9fa;
   border-radius: 8px;
-  padding: 24px;
+  padding: 25px;
 }
 
-.hardware-info h2 {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 24px;
+/* Left side: Hardware info and images */
+.hardware-detail-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-.info-grid {
+.hardware-info-grid {
   display: grid;
   gap: 16px;
 }
 
-.info-item {
+.hardware-info-item {
   display: grid;
   grid-template-columns: 150px 1fr;
   padding: 12px;
@@ -93,54 +109,53 @@
   align-items: center;
 }
 
-.info-item:last-child {
+.hardware-info-item:last-child {
   border-bottom: none;
 }
 
-.info-item label {
+.hardware-info-item label {
   font-weight: 500;
   color: #666;
 }
 
-.info-item span {
+.hardware-info-item span {
   color: #333;
   font-size: 1rem;
 }
 
-/* Section Headers */
-.section-header {
+.hardware-section-header {
   display: flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 16px;
 }
 
-.section-icon {
+.hardware-section-icon {
   width: 20px;
   height: 20px;
   color: #666;
 }
 
-.section-header h3 {
+.hardware-section-header h3 {
   font-size: 1.2rem;
   color: #333;
   font-weight: 500;
 }
 
-/* Images Section */
-.hardware-images {
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  padding: 24px;
+/* Image Section */
+.hardware-detail-images {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-.image-grid {
+.hardware-image-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
 }
 
-.device-image {
+.hardware-device-image {
   width: 100%;
   height: 200px;
   object-fit: cover;
@@ -148,45 +163,49 @@
   border: 1px solid #eee;
 }
 
-/* Side Content Styles */
-.side-content {
+/* Right side: Datasheet and Tutorial */
+.hardware-detail-side-content {
+  flex-grow: 1;
+  flex-shrink: 1;
+  min-width: 250px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  justify-content: space-between;
+  gap: 25px;
 }
 
 /* Datasheet Section */
-.datasheet-section {
+.hardware-datasheet-section {
   background-color: #f8f9fa;
   border-radius: 8px;
   padding: 24px;
 }
 
-.datasheet-content {
+.hardware-datasheet-content {
   background-color: white;
   border: 1px solid #eee;
   border-radius: 6px;
   padding: 16px;
 }
 
-.datasheet-info {
+.hardware-datasheet-info {
   display: flex;
   flex-direction: column;
   gap: 4px;
   margin-bottom: 12px;
 }
 
-.datasheet-name {
+.hardware-datasheet-name {
   font-weight: 500;
   color: #333;
 }
 
-.datasheet-size {
+.hardware-datasheet-size {
   font-size: 0.9rem;
   color: #666;
 }
 
-.download-btn {
+.hardware-download-btn {
   display: inline-block;
   background-color: #007bff;
   color: white;
@@ -197,18 +216,18 @@
   transition: background-color 0.3s ease;
 }
 
-.download-btn:hover {
+.hardware-download-btn:hover {
   background-color: #0056b3;
 }
 
-/* Tutorial Section */
-.tutorial-section {
+.hardware-tutorial-section {
   background-color: #f8f9fa;
   border-radius: 8px;
   padding: 24px;
+  flex: 1; 
 }
 
-.video-container {
+.hardware-video-container {
   position: relative;
   padding-bottom: 56.25%;
   height: 0;
@@ -217,7 +236,7 @@
   margin-bottom: 16px;
 }
 
-.video-container iframe {
+.hardware-video-container iframe {
   position: absolute;
   top: 0;
   left: 0;
@@ -226,13 +245,13 @@
   border-radius: 8px;
 }
 
-.tutorial-description {
+.hardware-tutorial-description {
   font-size: 0.95rem;
   color: #666;
   line-height: 1.6;
 }
 
-.not-found {
+.hardware-detail-not-found {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -241,29 +260,28 @@
   color: #666;
 }
 
-/* Responsive Design */
 @media (max-width: 1024px) {
-  .hardware-content {
+  .hardware-detail-content {
     grid-template-columns: 1fr;
   }
 
-  .side-content {
+  .hardware-detail-side-content {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
 }
 
 @media (max-width: 768px) {
-  .side-content {
+  .hardware-detail-side-content {
     grid-template-columns: 1fr;
   }
 
-  .info-item {
+  .hardware-info-item {
     grid-template-columns: 1fr;
     gap: 4px;
   }
 
-  .hardware-info h2 {
+  .hardware-info-section h2 {
     font-size: 1.5rem;
   }
 }
