@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from "./pages/home";
 import Login from "./pages/login";
 import Register from "./pages/register";
-import Dashboard from "./pages/Dashboard";
+import AdminDashboard from "./pages/admin-dashboard";
 import User from "./pages/user";
 import HardwareList from "./pages/hardware-list";
 import BorrowEquipment from './pages/borrow-equipment';
@@ -19,7 +19,7 @@ function App() {
           <Route path='/home' element={<Home/>}/>
           <Route path='/login' element={<Login/>}/>
           <Route path='/register' element={<Register/>}/>
-          <Route path='/dashboard' element={<Dashboard/>}/>
+          <Route path='/dashboard' element={<AdminDashboard/>}/>
           <Route path='/user' element={<User/>}/>
           <Route path='/hardware-list' element={<HardwareList/>}/>
           <Route path='/borrow-equipment' element={<BorrowEquipment/>}/>

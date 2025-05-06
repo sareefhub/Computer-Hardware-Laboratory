@@ -1,10 +1,10 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faUser, 
-  faMicrochip, 
-  faChartSimple, 
-  faHandshake, 
+import {
+  faUser,
+  faMicrochip,
+  faChartSimple,
+  faHandshake,
   faHistory,
   faPrint,
   faKey,
@@ -12,8 +12,8 @@ import {
   faHandHolding
 } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useLocation } from 'react-router-dom';
-import './sidebar.css';
 import { getCurrentUser } from '../helpers/helper';
+import './sidebar.css';
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -40,28 +40,25 @@ const Sidebar = () => {
   const accessibleMenuItems = menuItems.filter(item => item.roles.includes(role));
 
   return (
-    <div className="sidebar">
-      <h3 className="sidebar-custom-header" onClick={() => handleNavigate('/')}>
-        Computer Hardware Laboratory
-      </h3>
+    <aside className="sidebar-container">
+      <div className="sidebar-header" onClick={() => navigate('/')}>
+        <h3 className="sidebar-title">Menu</h3>
+      </div>
       <div className="sidebar-main">
-        {currentUser && (
-          <p className="cg">เมนู</p>
-        )}
         {accessibleMenuItems.map(({ path, icon, label }) => (
           <div
             key={path}
-            className={`sidebar-items ${isActive(path) ? 'sidebar-items-active' : ''}`}
+            className={`sidebar-item ${isActive(path) ? 'sidebar-item-active' : ''}`}
             onClick={() => handleNavigate(path)}
           >
             <div className="sidebar-icon">
               <FontAwesomeIcon icon={icon} />
             </div>
-            <p>{label}</p>
+            <p className="sidebar-label">{label}</p>
           </div>
         ))}
       </div>
-    </div>
+    </aside>
   );
 };
 

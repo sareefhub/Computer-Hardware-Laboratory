@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;500&display=swap');
 
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
   font-family: 'Kanit', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -13,42 +13,53 @@
   display: none;
 }
 
-.navbar {
+.navbar-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   background: white;
   padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  z-index: 999;
 }
 
-.navbar-login-button,
-.navbar-logout-button {
+.navbar-logo {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #002147;
+  cursor: pointer;
+}
+
+.navbar-login-btn,
+.navbar-logout-btn {
   background-color: black;
   color: white;
-  padding: 12px 24px;
+  padding: 10px 20px;
   font-size: 16px;
-  cursor: pointer;
   border-radius: 8px;
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: all 0.3s ease;
-  border: none;
-  margin-left: auto;
-}
-
-.navbar-login-button:hover,
-.navbar-logout-button:hover {
-  background: #ff7551;
-  color: white;
-}
-
-.navbar-profile {
-  font-size: 16px;
   cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.navbar-login-btn:hover,
+.navbar-logout-btn:hover {
+  background: #ff7551;
+}
+
+.navbar-user-section {
   display: flex;
   align-items: center;
   gap: 20px;
-  margin-left: auto;
+}
+
+.navbar-username {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1a1a1a;
 }

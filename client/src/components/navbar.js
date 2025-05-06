@@ -21,29 +21,29 @@ const Navbar = () => {
   }, []);
 
   const handleLoginClick = () => {
-    if (isLoggedIn) {
-      localStorage.removeItem("currentUser");
-      setIsLoggedIn(false);
-      setUser({ name: '', role: '' });
-      navigate('/login');
-    } else {
-      navigate('/login');
-    }
+    localStorage.removeItem("currentUser");
+    setIsLoggedIn(false);
+    setUser({ name: '', role: '' });
+    navigate('/login');
   };
 
+  const handleLogoClick = () => navigate('/');
+
   return (
-    <div className="navbar">
+    <div className="navbar-container">
+      <h3 className="navbar-logo" onClick={handleLogoClick}>
+        Computer Hardware Laboratory
+      </h3>
+
       {!isLoggedIn ? (
-        <button className="navbar-login-button" onClick={handleLoginClick}>
-          Sign In
-          <FontAwesomeIcon icon={faSignInAlt} />
+        <button className="navbar-login-btn" onClick={handleLoginClick}>
+          Sign In <FontAwesomeIcon icon={faSignInAlt} />
         </button>
       ) : (
-        <div className="navbar-profile">
-          <p>{user.name}</p>
-          <button className="navbar-logout-button" onClick={handleLoginClick}>
-            Logout
-            <FontAwesomeIcon icon={faSignOutAlt} />
+        <div className="navbar-user-section">
+          <p className="navbar-username">{user.name}</p>
+          <button className="navbar-logout-btn" onClick={handleLoginClick}>
+            Logout <FontAwesomeIcon icon={faSignOutAlt} />
           </button>
         </div>
       )}
