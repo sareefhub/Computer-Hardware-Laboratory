@@ -41,21 +41,21 @@ const Home = () => {
   ];
 
   return (
-    <div className="page-home">
+    <div className="home-page">
       {isLoggedIn && <Sidebar />}
-      <div className={`content ${!isLoggedIn ? "content-full-width" : ""}`}>
+      <div className={`home-content ${!isLoggedIn ? "home-content-full-width" : ""}`}>
         <Navbar />
-        <div className="main-container">
-          <div className="content-grid">
-            <div className="left-section">
-              <div className="welcome-section">
+        <div className="home-main-container">
+          <div className="home-content-grid">
+            <div className="home-left-section">
+              <div className="home-welcome-section">
                 <h1>ระบบยืม-คืนอุปกรณ์ฮาร์ดแวร์</h1>
                 <p>สำหรับนักศึกษาและบุคลากร</p>
               </div>
 
-              <div className="hardware-section">
+              <div className="home-hardware-section">
                 <h2>อุปกรณ์ที่สามารถยืมได้</h2>
-                <ul className="hardware-list">
+                <ul className="home-hardware-list">
                   <li>• Arduino Boards และอุปกรณ์เสริม</li>
                   <li>• Sensors และ Modules ต่างๆ</li>
                   <li>• Raspberry Pi และอุปกรณ์ที่เกี่ยวข้อง</li>
@@ -65,13 +65,13 @@ const Home = () => {
               </div>
             </div>
 
-            <div className="right-section">
+            <div className="home-right-section">
               <h2>กฎในการยืมของ</h2>
-              <div className="rules-grid">
+              <div className="home-rules-grid">
                 {borrowingRules.map((rule, index) => (
-                  <div key={index} className="rule-card">
-                    <div className="rule-header">
-                      <div className="rule-icon">{rule.icon}</div>
+                  <div key={index} className="home-rule-card">
+                    <div className="home-rule-header">
+                      <div className="home-rule-icon">{rule.icon}</div>
                       <h3>{rule.title}</h3>
                     </div>
                     <p>{rule.description}</p>
