@@ -16,6 +16,10 @@
   font-family: "Kanit", Arial, sans-serif;
 }
 
+body {
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+}
+
 .home-page {
   width: 100%;
   min-height: 100vh;
@@ -23,14 +27,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
+  padding: 4vh 4vw;
 }
 
 .home-box {
   background-color: white;
-  border-radius: 16px;
-  width: 100%;
-  padding: 2rem;
+  border-radius: 1.5rem;
+  width: min(100%, 1000px);
+  padding: 4vw;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -40,8 +44,8 @@
 
 .home-main {
   background: white;
-  border-radius: 12px;
-  padding: 2rem;
+  border-radius: 1rem;
+  padding: 2vw;
   margin-top: 0;
 }
 
@@ -52,62 +56,63 @@
 
 .home-welcome {
   text-align: center;
-  padding: 2rem;
-  border-radius: 12px;
+  padding: 3vw;
+  border-radius: 1rem;
   background-color: var(--home-light);
 }
 
-.home-welcome h1 {
-  font-size: 2rem;
+.home-welcome-title {
+  font-size: clamp(1.5rem, 5vw, 2.2rem);
   color: var(--home-primary);
   font-weight: bold;
   margin-bottom: 1rem;
 }
 
-.home-welcome p {
-  font-size: 1.1rem;
+.home-welcome-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
   color: var(--home-muted);
 }
 
 .home-hardware {
   background-color: white;
-  padding: 1.5rem;
-  border-radius: 8px;
+  padding: 2vw;
+  border-radius: 1rem;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+  display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin: 0 auto;
 }
 
-.home-hardware h2 {
-  font-size: 1.25rem;
+.home-hardware-title {
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
   color: var(--home-primary);
   border-bottom: 2px solid var(--home-primary);
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
 }
 
-.home-hardware ul {
+.home-hardware-list {
   list-style: none;
   padding-left: 0;
+  width: 100%;
 }
 
-.home-hardware li {
-  font-size: 1rem;
+.home-hardware-list-item {
+  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
   color: #333;
   margin-bottom: 0.5rem;
 }
 
 .home-rules {
   background-color: white;
-  padding: 1.5rem;
-  border-radius: 8px;
+  padding: 2vw;
+  border-radius: 0.8rem;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
 }
 
-.home-rules h2 {
-  font-size: 1.25rem;
+.home-rules-title {
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
   color: var(--home-primary);
   text-align: center;
   margin-bottom: 1rem;
@@ -117,15 +122,15 @@
 
 .home-rules-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
 }
 
 .home-rule {
   background: var(--home-light);
   border-left: 5px solid var(--home-primary);
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: 0.75rem;
   transition: all 0.2s ease;
 }
 
@@ -146,15 +151,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
 }
 
-.home-rule-header h3 {
-  font-size: 1rem;
+.home-rule-title {
+  font-size: clamp(1.05rem, 2.5vw, 1.3rem);
   color: var(--home-text);
   font-weight: bold;
 }
 
-.home-rule p {
-  font-size: 0.95rem;
+.home-rule-description {
+  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
   color: var(--home-muted);
 }

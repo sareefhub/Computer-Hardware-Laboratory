@@ -4,9 +4,9 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Sidebar from "../components/sidebar";
 import Navbar from "../components/navbar";
 import { getCurrentUser } from "../helpers/helper";
-import { getBorrowedItems, deleteBorrowedItem } from "../api/borrowedItemsApi";
-import { getBorrowHistory } from "../api/borrowHistoryApi";
-import { addBorrowHistory } from "../api/borrowHistoryApi";
+import { getBorrowedItems, deleteBorrowedItem } from "../services/borrowedItemsApi";
+import { getBorrowHistory } from "../services/borrowHistoryApi";
+import { addBorrowHistory } from "../services/borrowHistoryApi";
 import "./borrow-confirm.css";
 
 const BorrowConfirm = ({ onRemoveItem = () => {}, onConfirmBorrow = () => {} }) => {

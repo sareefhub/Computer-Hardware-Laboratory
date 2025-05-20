@@ -20,10 +20,14 @@ const Navbar = () => {
     }
   }, []);
 
-  const handleLoginClick = () => {
+  const handleLogout = () => {
     localStorage.removeItem("currentUser");
     setIsLoggedIn(false);
     setUser({ name: '', role: '' });
+    navigate('/');
+  };
+
+  const handleLoginClick = () => {
     navigate('/login');
   };
 
@@ -42,7 +46,7 @@ const Navbar = () => {
       ) : (
         <div className="navbar-user-section">
           <p className="navbar-username">{user.name}</p>
-          <button className="navbar-logout-btn" onClick={handleLoginClick}>
+          <button className="navbar-logout-btn" onClick={handleLogout}>
             Logout <FontAwesomeIcon icon={faSignOutAlt} />
           </button>
         </div>

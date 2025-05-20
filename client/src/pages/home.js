@@ -24,31 +24,31 @@ const Home = () => {
         <div className="home-main">
           <div className="home-grid">
             <div className="home-welcome">
-              <h1>ระบบยืม-คืนอุปกรณ์ฮาร์ดแวร์</h1>
-              <p>สำหรับนักศึกษาและบุคลากร</p>
+              <div className="home-welcome-title">ระบบยืม-คืนอุปกรณ์ฮาร์ดแวร์</div>
+              <div className="home-welcome-subtitle">สำหรับนักศึกษาและบุคลากร</div>
             </div>
 
             <div className="home-hardware">
-              <h2>อุปกรณ์ที่สามารถยืมได้</h2>
-              <ul>
-                <li>• Arduino Boards และอุปกรณ์เสริม</li>
-                <li>• Sensors และ Modules ต่างๆ</li>
-                <li>• Raspberry Pi และอุปกรณ์ที่เกี่ยวข้อง</li>
-                <li>• เครื่องมือวัดและทดสอบ</li>
-                <li>• อุปกรณ์ประกอบการเรียนการสอน</li>
+              <div className="home-hardware-title">อุปกรณ์ที่สามารถยืมได้</div>
+              <ul className="home-hardware-list">
+                <li className="home-hardware-list-item">• Arduino Boards และอุปกรณ์เสริม</li>
+                <li className="home-hardware-list-item">• Sensors และ Modules ต่างๆ</li>
+                <li className="home-hardware-list-item">• Raspberry Pi และอุปกรณ์ที่เกี่ยวข้อง</li>
+                <li className="home-hardware-list-item">• เครื่องมือวัดและทดสอบ</li>
+                <li className="home-hardware-list-item">• อุปกรณ์ประกอบการเรียนการสอน</li>
               </ul>
             </div>
 
             <div className="home-rules">
-              <h2>กฎในการยืมของ</h2>
+              <div className="home-rules-title">กฎในการยืมของ</div>
               <div className="home-rules-grid">
                 {borrowingRules.map((rule, index) => (
                   <div key={index} className="home-rule">
                     <div className="home-rule-header">
                       <div>{rule.icon}</div>
-                      <h3>{rule.title}</h3>
+                      <div className="home-rule-title">{rule.title}</div>
                     </div>
-                    <p>{rule.description}</p>
+                    <div className="home-rule-description">{rule.description}</div>
                   </div>
                 ))}
               </div>

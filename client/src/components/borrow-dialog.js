@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { addBorrowedItem } from "../api/borrowedItemsApi"; // Import API function
+import { addBorrowedItem } from "../services/borrowedItemsApi"; // Import API function
 import "./borrow-dialog.css";
 
 const getCurrentUser = () => {
