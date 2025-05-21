@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignInAlt, faSignOutAlt, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faSignInAlt, faSignOutAlt, faBars } from '@fortawesome/free-solid-svg-icons';
 import Sidebar from './sidebar';
 import './navbar.css';
 
@@ -35,9 +35,6 @@ const Navbar = () => {
   return (
     <>
       <div className="navbar-container">
-        <div className="navbar-toggle" onClick={() => setMenuOpen(!menuOpen)}>
-          <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} />
-        </div>
         <div className="navbar-left">
           <h3 className="navbar-logo" onClick={handleLogoClick}>
             Computer Hardware Laboratory
@@ -56,6 +53,9 @@ const Navbar = () => {
             </button>
           </div>
         )}
+        <div className="navbar-toggle" onClick={() => setMenuOpen(true)}>
+          <FontAwesomeIcon icon={faBars} />
+        </div>
       </div>
 
       <Sidebar isOpen={menuOpen} onClose={() => setMenuOpen(false)} />

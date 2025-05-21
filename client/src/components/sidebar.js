@@ -9,7 +9,8 @@ import {
   faPrint,
   faKey,
   faCircleQuestion,
-  faHandHolding
+  faHandHolding,
+  faTimes
 } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getCurrentUser } from '../helpers/helper';
@@ -44,8 +45,11 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   return (
     <aside className={`sidebar-container ${isOpen ? 'sidebar-open' : ''}`}>
-      <div className="sidebar-header" onClick={() => navigate('/')}>
-        <h3 className="sidebar-title">Menu</h3>
+      <div className="sidebar-header">
+        <h3 className="sidebar-title" onClick={() => navigate('/')}>Menu</h3>
+        <button className="sidebar-close-btn" onClick={onClose}>
+          <FontAwesomeIcon icon={faTimes} />
+        </button>
       </div>
       <div className="sidebar-main">
         {accessibleMenuItems.map(({ path, icon, label }) => (
