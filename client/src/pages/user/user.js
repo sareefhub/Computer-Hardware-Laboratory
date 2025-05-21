@@ -1,9 +1,9 @@
 import React from 'react';
-import Sidebar from '../components/sidebar';
-import Navbar from '../components/navbar';
+import Sidebar from '../../components/sidebar';
+import Navbar from '../../components/navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faSearch, faUserPlus } from '@fortawesome/free-solid-svg-icons';
-import users from '../mockData/userData';
+import users from '../../mockData/userData';
 import "./user.css";
 
 const User = () => (

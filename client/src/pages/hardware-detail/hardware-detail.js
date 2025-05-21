@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
 import { FileText, Youtube, ImageIcon } from 'lucide-react';
-import hardwareData from "../mockData/hardwareData";
-import Sidebar from "../components/sidebar";
-import Navbar from "../components/navbar";
+import hardwareData from "../../mockData/hardwareData";
+import Sidebar from "../../components/sidebar";
+import Navbar from "../../components/navbar";
 import "./hardware-detail.css";
 
 const HardwareDetail = () => {

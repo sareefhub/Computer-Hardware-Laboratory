@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  
-import Sidebar from '../components/sidebar';
-import Navbar from '../components/navbar';
+import Sidebar from '../../components/sidebar';
+import Navbar from '../../components/navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import './hardware-list.css';
-import hardwareData from '../mockData/hardwareData';
-import { getCurrentUser } from '../helpers/helper'; // ดึงข้อมูลผู้ใช้
+import hardwareData from '../../mockData/hardwareData';
+import { getCurrentUser } from '../../helpers/helper'; // ดึงข้อมูลผู้ใช้
 
 const HardwareList = () => {
   // State สำหรับการกรองหมวดหมู่และการจัดการหน้า

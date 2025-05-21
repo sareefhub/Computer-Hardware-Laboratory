@@ -1,10 +1,10 @@
 import { useState } from "react";
-import Sidebar from "../components/sidebar";
-import Navbar from "../components/navbar";
+import Sidebar from "../../components/sidebar";
+import Navbar from "../../components/navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./borrowing-history.css";
-import hardwareData from "../mockData/hardwareData";
+import hardwareData from "../../mockData/hardwareData";
 
 const BorrowingHistory = () => {
   const [currentPage, setCurrentPage] = useState(1);

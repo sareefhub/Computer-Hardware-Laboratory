@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./admin-dashboard.css";
-import Navbar from "../components/navbar";
-import Sidebar from "../components/sidebar";
+import Navbar from "../../components/navbar";
+import Sidebar from "../../components/sidebar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMicrochip,

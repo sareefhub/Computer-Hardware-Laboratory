@@ -1,12 +1,12 @@
 import { useState } from "react";
-import Sidebar from "../components/sidebar";
-import Navbar from "../components/navbar";
+import Sidebar from "../../components/sidebar";
+import Navbar from "../../components/navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHandHolding, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./borrow-equipment.css";
-import hardwareData from "../mockData/hardwareData";
-import { getCurrentUser } from "../helpers/helper";
-import BorrowDialog from "../components/borrow-dialog";
+import hardwareData from "../../mockData/hardwareData";
+import { getCurrentUser } from "../../helpers/helper";
+import BorrowDialog from "../../components/borrow-dialog";
 
 const BorrowEquipment = () => {
   const [selectedCategory, setSelectedCategory] = useState("ทั้งหมด");

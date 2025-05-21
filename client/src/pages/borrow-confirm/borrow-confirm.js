@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import Sidebar from "../components/sidebar";
-import Navbar from "../components/navbar";
-import { getCurrentUser } from "../helpers/helper";
-import { getBorrowedItems, deleteBorrowedItem } from "../services/borrowedItemsApi";
-import { getBorrowHistory } from "../services/borrowHistoryApi";
-import { addBorrowHistory } from "../services/borrowHistoryApi";
+import Sidebar from "../../components/sidebar";
+import Navbar from "../../components/navbar";
+import { getCurrentUser } from "../../helpers/helper";
+import { getBorrowedItems, deleteBorrowedItem } from "../../hooks/borrowedItemsApi";
+import { getBorrowHistory } from "../../hooks/borrowHistoryApi";
+import { addBorrowHistory } from "../../hooks/borrowHistoryApi";
 import "./borrow-confirm.css";
 
 const BorrowConfirm = ({ onRemoveItem = () => {}, onConfirmBorrow = () => {} }) => {

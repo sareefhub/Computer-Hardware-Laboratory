@@ -1,7 +1,7 @@
 import React from 'react';
 import { Clock, Calendar, AlertCircle, Timer, Ban, PenToolIcon as Tool } from 'lucide-react';
-import Sidebar from "../components/sidebar";
-import Navbar from "../components/navbar";
+import Sidebar from "../../components/sidebar";
+import Navbar from "../../components/navbar";
 import "./home.css";
 
 const Home = () => {

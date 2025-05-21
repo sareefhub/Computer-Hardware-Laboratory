@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import users from "../mockData/userData";
-import { setCurrentUser } from "../helpers/helper";
+import users from "../../mockData/userData";
+import { setCurrentUser } from "../../helpers/helper";
 import "./login.css";
 
 const Login = () => {
