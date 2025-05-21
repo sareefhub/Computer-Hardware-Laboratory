@@ -15,7 +15,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { getCurrentUser } from '../helpers/helper';
 import './sidebar.css';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -34,13 +34,16 @@ const Sidebar = () => {
     { path: '/how-to-use', icon: faCircleQuestion, label: 'วิธีการใช้งาน', roles: ['admin', 'user'] }
   ];
 
-  const handleNavigate = (path) => navigate(path);
-  const isActive = (path) => location.pathname === path;
+  const handleNavigate = (path) => {
+    onClose();
+    navigate(path);
+  };
 
+  const isActive = (path) => location.pathname === path;
   const accessibleMenuItems = menuItems.filter(item => item.roles.includes(role));
 
   return (
-    <aside className="sidebar-container">
+    <aside className={`sidebar-container ${isOpen ? 'sidebar-open' : ''}`}>
       <div className="sidebar-header" onClick={() => navigate('/')}>
         <h3 className="sidebar-title">Menu</h3>
       </div>

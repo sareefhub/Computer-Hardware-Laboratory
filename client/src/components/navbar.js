@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSignInAlt, faSignOutAlt, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import Sidebar from './sidebar';
 import './navbar.css';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState({ name: '', role: '' });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -27,31 +29,37 @@ const Navbar = () => {
     navigate('/');
   };
 
-  const handleLoginClick = () => {
-    navigate('/login');
-  };
-
+  const handleLoginClick = () => navigate('/login');
   const handleLogoClick = () => navigate('/');
 
   return (
-    <div className="navbar-container">
-      <h3 className="navbar-logo" onClick={handleLogoClick}>
-        Computer Hardware Laboratory
-      </h3>
-
-      {!isLoggedIn ? (
-        <button className="navbar-login-btn" onClick={handleLoginClick}>
-          Sign In <FontAwesomeIcon icon={faSignInAlt} />
-        </button>
-      ) : (
-        <div className="navbar-user-section">
-          <p className="navbar-username">{user.name}</p>
-          <button className="navbar-logout-btn" onClick={handleLogout}>
-            Logout <FontAwesomeIcon icon={faSignOutAlt} />
-          </button>
+    <>
+      <div className="navbar-container">
+        <div className="navbar-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+          <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} />
         </div>
-      )}
-    </div>
+        <div className="navbar-left">
+          <h3 className="navbar-logo" onClick={handleLogoClick}>
+            Computer Hardware Laboratory
+          </h3>
+        </div>
+
+        {!isLoggedIn ? (
+          <button className="navbar-login-btn" onClick={handleLoginClick}>
+            Sign In <FontAwesomeIcon icon={faSignInAlt} />
+          </button>
+        ) : (
+          <div className="navbar-user-section">
+            <p className="navbar-username">{user.name}</p>
+            <button className="navbar-logout-btn" onClick={handleLogout}>
+              Logout <FontAwesomeIcon icon={faSignOutAlt} />
+            </button>
+          </div>
+        )}
+      </div>
+
+      <Sidebar isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+    </>
   );
 };
 

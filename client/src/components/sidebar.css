@@ -1,6 +1,46 @@
+.sidebar-hamburger-btn {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  font-size: 1.5rem;
+  background: #002147;
+  color: white;
+  padding: 0.6rem;
+  border-radius: 8px;
+  z-index: 1001;
+  cursor: pointer;
+}
+
+/* Desktop view */
 .sidebar-container {
-  width: 100%;
+  width: 250px;
   padding: 30px;
+  background: #fff;
+}
+
+/* Mobile hidden by default */
+@media screen and (max-width: 768px) {
+  .sidebar-hamburger-btn {
+    display: block;
+  }
+
+  .sidebar-container {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    height: 100%;
+    width: 220px;
+    background: white;
+    padding: 30px 20px;
+    z-index: 1000;
+    transition: left 0.3s ease;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .sidebar-container.sidebar-open {
+    left: 0;
+  }
 }
 
 .sidebar-title {
