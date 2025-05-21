@@ -23,7 +23,7 @@ const Sidebar = () => {
   const { role } = currentUser || {};
 
   const menuItems = [
-    { path: '/dashboard', icon: faChartSimple, label: 'แดชบอร์ด', roles: ['admin'] },
+    { path: '/admin/dashboard', icon: faChartSimple, label: 'แดชบอร์ด', roles: ['admin'] },
     { path: '/user', icon: faUser, label: 'ผู้ใช้', roles: ['admin'] },
     { path: '/hardware-list', icon: faMicrochip, label: 'รายการฮาร์ดแวร์', roles: ['admin', 'user'] },
     { path: '/borrow-equipment', icon: faHandHolding, label: 'ยืมอุปกรณ์', roles: ['admin', 'user'] },
