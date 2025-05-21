@@ -8,14 +8,14 @@
   align-items: center;
   width: 100%;
   background: white;
-  padding: 10px 20px;
+  padding: clamp(0.5rem, 2vw, 1rem) clamp(1rem, 4vw, 2rem);
   border-bottom: 1px solid #ddd;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   z-index: 999;
 }
 
 .navbar-logo {
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
   font-weight: bold;
   color: #002147;
   cursor: pointer;
@@ -25,12 +25,12 @@
 .navbar-logout-btn {
   background-color: black;
   color: white;
-  padding: 10px 20px;
-  font-size: 16px;
+  padding: clamp(0.5rem, 1.5vw, 0.7rem) clamp(1rem, 3vw, 1.5rem);
+  font-size: clamp(0.9rem, 2vw, 1rem);
   border-radius: 8px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: clamp(0.3rem, 1vw, 0.5rem);
   cursor: pointer;
   border: none;
   transition: all 0.3s ease;
@@ -44,11 +44,11 @@
 .navbar-user-section {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: clamp(0.5rem, 2vw, 1.2rem);
 }
 
 .navbar-username {
-  font-size: 16px;
+  font-size: clamp(0.9rem, 2vw, 1rem);
   font-weight: 500;
   color: #1a1a1a;
 }
