@@ -1,44 +1,11 @@
-/* Hide scrollbar for Chrome, Safari and Opera */
-*::-webkit-scrollbar {
-    display: none;
-}
-
-.borrow-history-page {
-    width: 100%;
-    min-height: 100vh;
-    background: #f4f7fc;
-    display: flex;
-    flex-direction: column;
-}
-
-.borrow-history-navbar {
-    width: 100%;
-    z-index: 1000;
-}
-
-.borrow-history-body {
-    display: flex;
-    flex: 1;
-    min-height: calc(100vh - 60px);
-}
-
-.borrow-history-sidebar {
-    background-color: #ffffff;
-    border-right: 1px solid #eee;
-    min-height: 100%;
-    flex-shrink: 0;
-}
-
 .borrow-history-content {
     flex: 1;
-    background: #ffffff;
     min-height: 100%;
     overflow: auto;
 }
 
 .borrow-history-content-page {
     margin: 0 auto;
-    padding: 2rem;
 }
 
 .borrow-history-content-header {

@@ -4,6 +4,7 @@ import Navbar from "../../components/navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHandHolding, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./borrow-equipment.css";
+import "../../styles/layout.css";
 import hardwareData from "../../mockData/hardwareData";
 import { getCurrentUser } from "../../helpers/helper";
 import BorrowDialog from "../../components/borrow-dialog";
@@ -39,15 +40,13 @@ const BorrowEquipment = () => {
     setSelectedItem(item);
   };
 
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <div className="borrow-equipment-page">
-      <div className="borrow-equipment-navbar">
-        <Navbar />
-      </div>
-      <div className="borrow-equipment-body">
-        <div className="borrow-equipment-sidebar">
-          <Sidebar />
-        </div>
+    <div className="page-container">
+      <Navbar onToggleSidebar={() => setSidebarOpen(!isSidebarOpen)} />
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="page-content">
         <div className="borrow-equipment-content">
           <div className="borrow-equipment-content-page">
             <div className="borrow-equipment-content-header">

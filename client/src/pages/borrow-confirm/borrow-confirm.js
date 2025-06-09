@@ -8,6 +8,7 @@ import { getBorrowedItems, deleteBorrowedItem } from "../../hooks/borrowedItemsA
 import { getBorrowHistory } from "../../hooks/borrowHistoryApi";
 import { addBorrowHistory } from "../../hooks/borrowHistoryApi";
 import "./borrow-confirm.css";
+import "../../styles/layout.css";
 
 const BorrowConfirm = ({ onRemoveItem = () => {}, onConfirmBorrow = () => {} }) => {
   const [borrowedItems, setBorrowedItems] = useState([]);
@@ -76,15 +77,13 @@ const BorrowConfirm = ({ onRemoveItem = () => {}, onConfirmBorrow = () => {} }) 
     }
   };
 
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <div className="borrow-confirm-page">
-      <div className="borrow-confirm-navbar">
-        <Navbar />
-      </div>
-      <div className="borrow-confirm-body">
-        <div className="borrow-confirm-sidebar">
-          <Sidebar />
-        </div>
+    <div className="page-container">
+      <Navbar onToggleSidebar={() => setSidebarOpen(!isSidebarOpen)} />
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="page-content">
         <div className="borrow-confirm-content">
           <div className="borrow-confirm-content-page">
             <div className="borrow-confirm-content-header">

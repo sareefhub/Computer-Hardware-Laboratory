@@ -4,6 +4,7 @@ import Navbar from "../../components/navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./borrowing-history.css";
+import "../../styles/layout.css";
 import hardwareData from "../../mockData/hardwareData";
 
 const BorrowingHistory = () => {
@@ -16,15 +17,13 @@ const BorrowingHistory = () => {
   const handlePageChange = (direction) =>
     setCurrentPage(prevPage => direction === 'next' ? Math.min(prevPage + 1, totalPages) : Math.max(prevPage - 1, 1));
 
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <div className="borrow-history-page">
-      <div className="borrow-history-navbar">
-        <Navbar />
-      </div>
-      <div className="borrow-history-body">
-        <div className="borrow-history-sidebar">
-          <Sidebar />
-        </div>
+    <div className="page-container">
+      <Navbar onToggleSidebar={() => setSidebarOpen(!isSidebarOpen)} />
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="page-content">
         <div className="borrow-history-content">
           <div className="borrow-history-content-page">
             <div className="borrow-history-content-header">
