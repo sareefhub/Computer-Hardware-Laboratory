@@ -9,6 +9,8 @@ import BorrowEquipment from '../pages/borrow-equipment/borrow-equipment';
 import BorrowingHistory from '../pages/borrowing-history/borrowing-history';
 import HardwareDetail from '../pages/hardware-detail/hardware-detail';
 import BorrowConfirm from '../pages/borrow-confirm/borrow-confirm';
+import PrintDelivery from '../pages/print-delivery/print-delivery';
+import ChangePassword from '../pages/change-password/change-password';
 
 export default function AppRoutes() {
   return (
@@ -24,6 +26,8 @@ export default function AppRoutes() {
       <Route path="/borrowing-history" element={<BorrowingHistory />} />
       <Route path="/hardware-detail/:id" element={<HardwareDetail />} />
       <Route path="/borrow-confirm" element={<BorrowConfirm />} />
+      <Route path="/print-delivery" element={<PrintDelivery />} />
+      <Route path="/change-password" element={<ChangePassword />} />
     </Routes>
   );
 }

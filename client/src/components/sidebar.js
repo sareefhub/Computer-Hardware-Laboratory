@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faUser, faMicrochip, faChartSimple, faHandshake,
-  faHistory, faPrint, faKey, faCircleQuestion, faHandHolding, faSignOutAlt
+  faHistory, faPrint, faKey, faHandHolding, faSignOutAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './sidebar.css';
@@ -38,10 +38,9 @@ const Sidebar = ({ isOpen }) => {
     { path: '/hardware-list', icon: faMicrochip, label: 'รายการฮาร์ดแวร์', roles: ['admin', 'user'] },
     { path: '/borrow-equipment', icon: faHandHolding, label: 'ยืมอุปกรณ์', roles: ['admin', 'user'] },
     { path: '/borrow-confirm', icon: faHandshake, label: 'ยืนยันการยืม', roles: ['admin', 'user'] },
-    { path: '/borrowing-history', icon: faHistory, label: 'ประวัติการยืม', roles: ['admin', 'user'] },
     { path: '/print-delivery', icon: faPrint, label: 'พิมพ์ใบนำส่งอุปกรณ์', roles: ['admin', 'user'] },
+    { path: '/borrowing-history', icon: faHistory, label: 'ประวัติการยืม', roles: ['admin', 'user'] },
     { path: '/change-password', icon: faKey, label: 'เปลี่ยนรหัสผ่าน', roles: ['admin', 'user'] },
-    { path: '/how-to-use', icon: faCircleQuestion, label: 'วิธีการใช้งาน', roles: ['admin', 'user'] }
   ];
 
   const accessibleMenuItems = menuItems.filter(item => item.roles.includes(user.role));
