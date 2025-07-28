@@ -2,20 +2,17 @@ import { useState } from "react";
 import Sidebar from "../../components/sidebar";
 import Navbar from "../../components/navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHandHolding, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faHandHolding } from "@fortawesome/free-solid-svg-icons";
 import "./borrow-equipment.css";
 import "../../styles/layout.css";
 import hardwareData from "../../mockData/hardwareData";
-import { getCurrentUser } from "../../helpers/helper";
 import BorrowDialog from "../../components/borrow-dialog";
 
 const BorrowEquipment = () => {
   const [selectedCategory, setSelectedCategory] = useState("ทั้งหมด");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedItem, setSelectedItem] = useState(null);
-
-  const currentUser = getCurrentUser();
-  const { role } = currentUser || {};
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   const itemsPerPage = 10;
   const categories = ["ทั้งหมด", ...new Set(hardwareData.map((item) => item.category))];
@@ -39,8 +36,6 @@ const BorrowEquipment = () => {
   const handleBorrow = (item) => {
     setSelectedItem(item);
   };
-
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="page-container">
@@ -74,7 +69,6 @@ const BorrowEquipment = () => {
                     <th>จำนวนที่เหลือ</th>
                     <th>ราคา/หน่วย</th>
                     <th>ยืม</th>
-                    {role !== "user" && <th>การจัดการ</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -91,18 +85,6 @@ const BorrowEquipment = () => {
                           <FontAwesomeIcon icon={faHandHolding} /> ยืม
                         </button>
                       </td>
-                      {role !== "user" && (
-                        <td>
-                          <div className="borrow-equipment-actions-cell">
-                            <button className="borrow-equipment-btn borrow-equipment-btn-edit">
-                              <FontAwesomeIcon icon={faEdit} />
-                            </button>
-                            <button className="borrow-equipment-btn borrow-equipment-btn-delete">
-                              <FontAwesomeIcon icon={faTrash} />
-                            </button>
-                          </div>
-                        </td>
-                      )}
                     </tr>
                   ))}
                 </tbody>
