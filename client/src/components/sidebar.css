@@ -8,24 +8,12 @@
   padding: 1em;
   transition: left 0.3s ease;
   z-index: 1000;
+  border-right: 1px solid #ddd;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar-container.sidebar-open {
   left: -250px;
-}
-
-.sidebar-hamburger-btn {
-  display: block;
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  font-size: 1.5rem;
-  background: #002147;
-  color: white;
-  padding: 0.6rem;
-  border-radius: 8px;
-  z-index: 1001;
-  cursor: pointer;
 }
 
 .sidebar-header {
@@ -89,6 +77,42 @@
 
 .sidebar-label {
   font-size: 1rem;
+}
+
+.sidebar-logout-btn {
+  background-color: black;
+  color: white;
+  padding: clamp(0.5rem, 1.5vw, 0.7rem) clamp(1rem, 3vw, 1.5rem);
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: clamp(0.3rem, 1vw, 0.5rem);
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  justify-content: center;
+  width: 100%;
+}
+
+.sidebar-logout-btn:hover {
+  background: #ff7551;
+}
+
+.sidebar-username {
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.sidebar-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+  margin-top: auto;
 }
 
 @media screen and (max-width: 1024px) {

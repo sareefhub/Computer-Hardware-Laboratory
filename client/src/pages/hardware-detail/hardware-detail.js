@@ -1,15 +1,25 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { FileText, Youtube, ImageIcon } from 'lucide-react';
+import { FileText, Youtube, ImageIcon } from "lucide-react";
 import hardwareData from "../../mockData/hardwareData";
 import Sidebar from "../../components/sidebar";
 import Navbar from "../../components/navbar";
 import "./hardware-detail.css";
+import "../../styles/layout.css";
 
 const HardwareDetail = () => {
   const { id } = useParams();
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
   const hardware = hardwareData.find((item) => item.id === Number.parseInt(id));
 
-  // ข้อมูลตัวอย่าง - ในระบบจริง ควรดึงข้อมูลจากฐานข้อมูล
+  if (!hardware) {
+    return (
+      <div className="hardware-detail-not-found">
+        <h2>ไม่พบอุปกรณ์!</h2>
+      </div>
+    );
+  }
+
   const sampleHardware = {
     ...hardware,
     images: ["/placeholder.svg?height=300&width=400", "/placeholder.svg?height=300&width=400"],
@@ -24,23 +34,11 @@ const HardwareDetail = () => {
     }
   };
 
-  if (!hardware) {
-    return (
-      <div className="hardware-detail-not-found">
-        <h2>ไม่พบอุปกรณ์!</h2>
-      </div>
-    );
-  }
-
   return (
-    <div className="hardware-detail-page">
-      <div className="hardware-detail-navbar">
-        <Navbar />
-      </div>
-      <div className="hardware-detail-body">
-        <div className="hardware-detail-sidebar">
-          <Sidebar />
-        </div>
+    <div className="page-container">
+      <Navbar onToggleSidebar={() => setSidebarOpen(!isSidebarOpen)} />
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="page-content">
         <div className="hardware-detail-content">
           <div className="hardware-detail-content-page">
             <div className="hardware-detail-header">
@@ -51,7 +49,6 @@ const HardwareDetail = () => {
             </div>
             <div className="hardware-detail-wrapper">
               <div className="hardware-detail-content-main">
-                {/* ข้อมูลอุปกรณ์ */}
                 <div className="hardware-detail-info">
                   <h2>{hardware.deviceName}</h2>
                   <div className="hardware-info-grid">
@@ -78,7 +75,6 @@ const HardwareDetail = () => {
                   </div>
                 </div>
 
-                {/* รูปภาพอุปกรณ์ */}
                 <div className="hardware-detail-images">
                   <div className="hardware-section-header">
                     <ImageIcon className="hardware-section-icon" />
@@ -97,9 +93,7 @@ const HardwareDetail = () => {
                 </div>
               </div>
 
-              {/* ส่วนข้อมูลด้านข้าง */}
               <div className="hardware-detail-side-content">
-                {/* Datasheet */}
                 {sampleHardware.datasheet && (
                   <div className="hardware-datasheet-section">
                     <div className="hardware-section-header">
@@ -118,7 +112,6 @@ const HardwareDetail = () => {
                   </div>
                 )}
 
-                {/* Tutorial Section */}
                 {sampleHardware.tutorial && (
                   <div className="hardware-tutorial-section">
                     <div className="hardware-section-header">
