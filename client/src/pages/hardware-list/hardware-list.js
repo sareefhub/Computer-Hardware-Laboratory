@@ -3,38 +3,34 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/sidebar';
 import Navbar from '../../components/navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faEye, faPlus } from '@fortawesome/free-solid-svg-icons';
 import './hardware-list.css';
 import "../../styles/layout.css";
 import hardwareData from '../../mockData/hardwareData';
-import { getCurrentUser } from '../../helpers/helper'; // ดึงข้อมูลผู้ใช้
+import { getCurrentUser } from '../../helpers/helper';
 
 const HardwareList = () => {
-  // State สำหรับการกรองหมวดหมู่และการจัดการหน้า
   const [selectedCategory, setSelectedCategory] = useState('ทั้งหมด');
   const [currentPage, setCurrentPage] = useState(1);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
-  // ดึงข้อมูลผู้ใช้
   const currentUser = getCurrentUser();
-  const { role } = currentUser || {};    // ดึงบทบาท (admin/user)
+  const { role } = currentUser || {};
 
-  const itemsPerPage = 10;  // จำนวนรายการที่แสดงในแต่ละหน้า
-  const categories = ['ทั้งหมด', ...new Set(hardwareData.map(item => item.category))];  // การกรองหมวดหมู่จากข้อมูล
-  const filteredData = selectedCategory === 'ทั้งหมด' ? hardwareData : hardwareData.filter(item => item.category === selectedCategory); // การกรองข้อมูลตามหมวดหมู่ที่เลือก
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage); // คำนวณจำนวนหน้า
-  const paginatedData = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage); // ข้อมูลที่แสดงในแต่ละหน้า
+  const itemsPerPage = 10;
+  const categories = ['ทั้งหมด', ...new Set(hardwareData.map(item => item.category))];
+  const filteredData = selectedCategory === 'ทั้งหมด'
+    ? hardwareData
+    : hardwareData.filter(item => item.category === selectedCategory);
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const paginatedData = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  // ฟังก์ชันสำหรับเปลี่ยนหมวดหมู่
   const handleCategoryChange = (e) => setSelectedCategory(e.target.value);
-
-  // ฟังก์ชันสำหรับเปลี่ยนหน้า
-  const handlePageChange = (direction) => setCurrentPage(prevPage => direction === 'next' ? Math.min(prevPage + 1, totalPages) : Math.max(prevPage - 1, 1));
-
-  // ฟังก์ชันสำหรับการดูรายละเอียดอุปกรณ์
+  const handlePageChange = (direction) =>
+    setCurrentPage(prevPage => direction === 'next' ? Math.min(prevPage + 1, totalPages) : Math.max(prevPage - 1, 1));
   const handleViewDetails = (id) => navigate(`/hardware-detail/${id}`);
-
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const handleAddHardware = () => navigate("/hardware-add");
 
   return (
     <div className="page-container">
@@ -50,6 +46,11 @@ const HardwareList = () => {
               {categories.map(category => <option key={category} value={category}>{category}</option>)}
             </select>
           </div>
+          {role === 'admin' && (
+            <button className="hardware-list-btn-add" onClick={handleAddHardware}>
+              <FontAwesomeIcon icon={faPlus} /> เพิ่มอุปกรณ์
+            </button>
+          )}
         </div>
         <div className="hardware-list-content-table">
           <table className="hardware-list-table">

@@ -156,3 +156,21 @@
 .hardware-list-btn-delete:hover {
   background-color: #c82333;
 }
+
+.hardware-list-btn-add {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.hardware-list-btn-add:hover {
+  background-color: #1e40af;
+}
