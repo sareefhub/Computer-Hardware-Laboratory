@@ -8,59 +8,61 @@ import Link from "next/link"
 
 export function TeacherHeader() {
   const { user, logout } = useAuth()
-
-  // Mock notification count
   const pendingCount = 2
 
   return (
-    <header className="bg-white shadow-sm border-b">
+    <header className="relative z-50 bg-gradient-to-r from-[#153E90] via-[#1E4B9B] to-[#2E6BC6] shadow">
       <div className="container mx-auto px-4 py-4 max-w-7xl">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Link href="/teacher" className="text-xl font-bold text-blue-600">
+          <div className="flex items-center space-x-3">
+            <Link href="/teacher" className="text-xl font-bold text-white tracking-tight">
               ระบบยืม-คืนอุปกรณ์
             </Link>
-            <Badge variant="secondary" className="hidden md:inline-flex">
+            <Badge variant="secondary" className="hidden md:inline-flex bg-white/15 text-white border-white/20">
               อาจารย์
             </Badge>
           </div>
 
-          <nav className="hidden md:flex items-center space-x-6">
+          <nav className="hidden md:flex items-center space-x-4">
             <Link
               href="/teacher"
-              className="text-gray-700 hover:text-blue-600 transition-colors flex items-center space-x-1"
+              className="text-white/90 hover:text-white px-3 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
             >
               <Home className="h-4 w-4" />
               <span>หน้าหลัก</span>
             </Link>
-            <div className="relative">
-              <Bell className="h-5 w-5 text-gray-700" />
+            <div className="relative px-3 py-2 rounded-lg hover:bg-white/10">
+              <Bell className="h-5 w-5 text-white/90" />
               {pendingCount > 0 && (
-                <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs bg-red-500">
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-red-500 text-white">
                   {pendingCount}
                 </Badge>
               )}
             </div>
           </nav>
 
-          <div className="flex items-center space-x-2">
-            <div className="hidden md:block text-right">
-              <p className="text-sm font-medium text-gray-900">{user?.name}</p>
-              <p className="text-xs text-gray-500">{user?.department}</p>
+          <div className="hidden md:flex items-center space-x-3">
+            <div className="text-right">
+              <p className="text-sm font-medium text-white">{user?.name}</p>
+              <p className="text-xs text-white/80">{user?.department}</p>
             </div>
+            <Button variant="ghost" size="icon" onClick={logout} className="text-white hover:bg-white/10">
+              <LogOut className="h-4 w-4" />
+            </Button>
+          </div>
 
-            <div className="md:hidden relative">
-              <Button variant="ghost" size="icon">
+          <div className="md:hidden flex items-center gap-2">
+            <div className="relative">
+              <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
                 <Bell className="h-4 w-4" />
                 {pendingCount > 0 && (
-                  <Badge className="absolute -top-1 -right-1 h-4 w-4 flex items-center justify-center p-0 text-xs bg-red-500">
+                  <Badge className="absolute -top-1 -right-1 h-4 w-4 flex items-center justify-center p-0 text-[10px] bg-red-500 text-white">
                     {pendingCount}
                   </Badge>
                 )}
               </Button>
             </div>
-
-            <Button variant="ghost" size="icon" onClick={logout}>
+            <Button variant="ghost" size="icon" onClick={logout} className="text-white hover:bg-white/10">
               <LogOut className="h-4 w-4" />
             </Button>
           </div>
