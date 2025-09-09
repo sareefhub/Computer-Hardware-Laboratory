@@ -16,7 +16,7 @@ const mockUsers: Record<string, { password: string; user: User }> = {
       role: "student",
       name: "นายสมชาย ใจดี",
       email: "student@university.ac.th",
-      studentId: "65010001",
+      studentId: "6510110001",
       department: "วิศวกรรมคอมพิวเตอร์",
     },
   },
