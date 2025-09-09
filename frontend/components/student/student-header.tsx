@@ -42,7 +42,7 @@ export function StudentHeader() {
           <div className="hidden md:flex items-center space-x-3">
             <div className="text-right">
               <p className="text-sm font-medium text-white">{user?.name}</p>
-              <p className="text-xs text-white/80">{user?.studentId}</p>
+              <p className="text-xs text-white/80">{user?.studentCode}</p>
             </div>
             <Button variant="ghost" size="icon" onClick={logout} className="text-white hover:bg-white/10">
               <LogOut className="h-4 w-4" />
@@ -72,7 +72,7 @@ export function StudentHeader() {
           <div className="flex items-center justify-between border-b pb-3">
             <div>
               <p className="text-sm font-medium text-slate-900">{user?.name}</p>
-              <p className="text-xs text-slate-500">{user?.studentId}</p>
+              <p className="text-xs text-slate-500">{user?.studentCode}</p>
             </div>
             <Button variant="ghost" size="icon" onClick={logout} className="text-[#1E4B9B] hover:bg-[#1E4B9B]/10">
               <LogOut className="h-4 w-4" />
