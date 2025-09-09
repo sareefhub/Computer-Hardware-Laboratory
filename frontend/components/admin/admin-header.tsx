@@ -30,9 +30,13 @@ export function AdminHeader() {
               <Home className="h-4 w-4" />
               <span>หน้าหลัก</span>
             </Link>
-            <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
+            <Link
+              href="/admin/settings"
+              className="text-white/90 hover:text-white px-3 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
+            >
               <Settings className="h-4 w-4" />
-            </Button>
+              <span>ตั้งค่า</span>
+            </Link>
           </nav>
 
           <div className="flex items-center space-x-3">
@@ -42,9 +46,12 @@ export function AdminHeader() {
             </div>
 
             <div className="md:hidden">
-              <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
+              <Link
+                href="/admin/settings"
+                className="text-white hover:bg-white/10 p-2 rounded-lg"
+              >
                 <Settings className="h-4 w-4" />
-              </Button>
+              </Link>
             </div>
 
             <Button variant="ghost" size="icon" onClick={logout} className="text-white hover:bg-white/10">

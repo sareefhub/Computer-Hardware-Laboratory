@@ -1,15 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
-import { Search, User, Calendar, Package } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Search, User, Calendar, Package, ArrowRight } from "lucide-react"
 
-type BorrowItem = { name: string; quantity: number; serialNumbers: string[] }
+type BorrowItem = { name: string; quantity: number }
 
 type BorrowingRequest = {
   id: string
@@ -37,7 +36,7 @@ const statusOptions = [
 
 const mockBorrowingRequests: BorrowingRequest[] = [
   {
-    id: "BR1703123456789",
+    id: "1/2568-65010001-001",
     studentId: "65010001",
     studentName: "นายสมชาย ใจดี",
     course: "CPE101 - Computer Programming",
@@ -47,12 +46,12 @@ const mockBorrowingRequests: BorrowingRequest[] = [
     statusEmoji: "👨‍🏫",
     statusCode: 1,
     items: [
-      { name: "Arduino Uno R3", quantity: 2, serialNumbers: ["ARD001", "ARD002"] },
-      { name: "Breadboard", quantity: 1, serialNumbers: ["BB001"] },
+      { name: "Arduino Uno R3", quantity: 2 },
+      { name: "Breadboard", quantity: 1 },
     ],
   },
   {
-    id: "BR1703123456790",
+    id: "1/2568-65010002-002",
     studentId: "65010002",
     studentName: "นางสาวสมหญิง ใจงาม",
     course: "CPE102 - Digital Logic Design",
@@ -61,10 +60,10 @@ const mockBorrowingRequests: BorrowingRequest[] = [
     status: "เจ้าหน้าที่กำลังเตรียมอุปกรณ์",
     statusEmoji: "🔧",
     statusCode: 2,
-    items: [{ name: "Digital Multimeter", quantity: 1, serialNumbers: ["DMM001"] }],
+    items: [{ name: "Digital Multimeter", quantity: 1 }],
   },
   {
-    id: "BR1703123456791",
+    id: "1/2568-65010003-003",
     studentId: "65010003",
     studentName: "นายสมศักดิ์ ใจดี",
     course: "CPE201 - Data Structures",
@@ -73,10 +72,10 @@ const mockBorrowingRequests: BorrowingRequest[] = [
     status: "เจ้าหน้าที่เตรียมอุปกรณ์เสร็จแล้ว",
     statusEmoji: "✅",
     statusCode: 3,
-    items: [{ name: "Raspberry Pi 4", quantity: 1, serialNumbers: ["RPI001"] }],
+    items: [{ name: "Raspberry Pi 4", quantity: 1 }],
   },
   {
-    id: "BR1703123456792",
+    id: "1/2568-65010004-004",
     studentId: "65010004",
     studentName: "นางสาวสมใจ รักเรียน",
     course: "CPE301 - Database Systems",
@@ -85,12 +84,12 @@ const mockBorrowingRequests: BorrowingRequest[] = [
     status: "เบิกแล้วรอการคืนอุปกรณ์",
     statusEmoji: "📦",
     statusCode: 4,
-    items: [{ name: "Oscilloscope", quantity: 1, serialNumbers: ["OSC001"] }],
+    items: [{ name: "Oscilloscope", quantity: 1 }],
     borrowedDate: "2024-01-13T10:00:00",
     dueDate: "2024-01-20T17:00:00",
   },
   {
-    id: "BR1703123456793",
+    id: "1/2568-65010005-005",
     studentId: "65010005",
     studentName: "นายสมปอง ใจดี",
     course: "CPE102 - Digital Logic Design",
@@ -99,7 +98,7 @@ const mockBorrowingRequests: BorrowingRequest[] = [
     status: "คืนอุปกรณ์เสร็จแล้ว",
     statusEmoji: "🔄",
     statusCode: 5,
-    items: [{ name: "Soldering Iron", quantity: 2, serialNumbers: ["SOL001", "SOL002"] }],
+    items: [{ name: "Soldering Iron", quantity: 2 }],
     borrowedDate: "2024-01-11T09:00:00",
     returnedDate: "2024-01-14T15:30:00",
   },
@@ -108,7 +107,6 @@ const mockBorrowingRequests: BorrowingRequest[] = [
 export function BorrowingManagement() {
   const [requests, setRequests] = useState<BorrowingRequest[]>(mockBorrowingRequests)
   const [searchTerm, setSearchTerm] = useState("")
-  const [statusFilter, setStatusFilter] = useState("all")
 
   const filteredRequests = requests.filter((request) => {
     const s = searchTerm.toLowerCase()
@@ -117,26 +115,27 @@ export function BorrowingManagement() {
       request.studentId.includes(searchTerm) ||
       request.course.toLowerCase().includes(s) ||
       request.id.includes(searchTerm)
-    const matchesStatus = statusFilter === "all" || request.statusCode.toString() === statusFilter
-    return matchesSearch && matchesStatus
+    const isVisibleForAdmin = request.statusCode >= 2
+    return matchesSearch && isVisibleForAdmin
   })
 
-  const updateStatus = (requestId: string, newStatusCode: number) => {
-    const s = statusOptions.find((x) => x.code === newStatusCode)
-    if (!s) return
+  const nextStatus = (requestId: string) => {
     setRequests((prev) =>
-      prev.map((req) =>
-        req.id === requestId
-          ? {
-              ...req,
-              status: s.label,
-              statusEmoji: s.emoji,
-              statusCode: newStatusCode,
-              borrowedDate: newStatusCode >= 4 ? req.borrowedDate ?? new Date().toISOString() : req.borrowedDate,
-              returnedDate: newStatusCode === 5 ? req.returnedDate ?? new Date().toISOString() : req.returnedDate,
-            }
-          : req
-      )
+      prev.map((req) => {
+        if (req.id === requestId && req.statusCode < 5) {
+          const newCode = req.statusCode + 1
+          const s = statusOptions.find((x) => x.code === newCode)!
+          return {
+            ...req,
+            status: s.label,
+            statusEmoji: s.emoji,
+            statusCode: newCode,
+            borrowedDate: newCode === 4 ? new Date().toISOString() : req.borrowedDate,
+            returnedDate: newCode === 5 ? new Date().toISOString() : req.returnedDate,
+          }
+        }
+        return req
+      })
     )
   }
 
@@ -146,7 +145,7 @@ export function BorrowingManagement() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-gray-900">จัดการการยืมอุปกรณ์</h2>
-        <p className="text-gray-600">ติดตามและจัดการสถานะการยืม-คืนอุปกรณ์</p>
+        <p className="text-gray-600">ติดตามและอัปเดตสถานะการยืม-คืนอุปกรณ์</p>
       </div>
 
       <div className="bg-white rounded-lg shadow-sm p-4">
@@ -160,19 +159,6 @@ export function BorrowingManagement() {
               className="pl-10"
             />
           </div>
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-full md:w-64">
-              <SelectValue placeholder="เลือกสถานะ" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">ทุกสถานะ</SelectItem>
-              {statusOptions.map((status) => (
-                <SelectItem key={status.code} value={status.code.toString()}>
-                  {status.emoji} {status.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
         </div>
       </div>
 
@@ -215,21 +201,6 @@ export function BorrowingManagement() {
                   <div className="flex items-center gap-2">
                     <span className="text-2xl">{request.statusEmoji}</span>
                     <Badge className={getStatusColor(request.statusCode)}>{request.status}</Badge>
-                    <Select
-                      value={request.statusCode.toString()}
-                      onValueChange={(v) => updateStatus(request.id, parseInt(v))}
-                    >
-                      <SelectTrigger className="w-56">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {statusOptions.map((s) => (
-                          <SelectItem key={s.code} value={s.code.toString()}>
-                            {s.emoji} {s.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
                   </div>
                 </div>
               </CardHeader>
@@ -263,13 +234,6 @@ export function BorrowingManagement() {
                             จำนวน: {item.quantity}
                           </Badge>
                         </div>
-                        <div className="flex flex-wrap gap-1">
-                          {item.serialNumbers.map((serial) => (
-                            <Badge key={serial} variant="secondary" className="text-xs">
-                              {serial}
-                            </Badge>
-                          ))}
-                        </div>
                       </div>
                     ))}
                   </div>
@@ -294,6 +258,12 @@ export function BorrowingManagement() {
                       <strong>วันที่คืน:</strong> {new Date(request.returnedDate).toLocaleDateString("th-TH")}
                     </p>
                   </div>
+                )}
+
+                {request.statusCode < 5 && (
+                  <Button onClick={() => nextStatus(request.id)} className="w-full flex items-center gap-2">
+                    ดำเนินการขั้นถัดไป <ArrowRight className="h-4 w-4" />
+                  </Button>
                 )}
               </CardContent>
             </Card>

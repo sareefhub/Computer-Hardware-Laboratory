@@ -12,7 +12,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search, Plus, Edit, Trash2, Package } from "lucide-react"
 import Image from "next/image"
 
-// Mock equipment data
 const mockEquipments = [
   {
     id: "1",
@@ -22,7 +21,6 @@ const mockEquipments = [
     available: 15,
     total: 20,
     image: "/placeholder-rt7xh.png",
-    serialNumbers: ["ARD001", "ARD002", "ARD003", "ARD004", "ARD005"],
     location: "ห้องแลป A101",
     condition: "ดี",
   },
@@ -34,7 +32,6 @@ const mockEquipments = [
     available: 8,
     total: 12,
     image: "/raspberry-pi-4-board.png",
-    serialNumbers: ["RPI001", "RPI002", "RPI003", "RPI004"],
     location: "ห้องแลป A102",
     condition: "ดี",
   },
@@ -46,7 +43,6 @@ const mockEquipments = [
     available: 25,
     total: 30,
     image: "/placeholder-db6ew.png",
-    serialNumbers: ["DMM001", "DMM002", "DMM003", "DMM004", "DMM005"],
     location: "ห้องแลป B201",
     condition: "ดี",
   },
@@ -60,7 +56,6 @@ interface Equipment {
   available: number
   total: number
   image: string
-  serialNumbers: string[]
   location: string
   condition: string
 }
@@ -79,7 +74,6 @@ export function EquipmentManagement() {
     total: 0,
     location: "",
     condition: "ดี",
-    serialNumbers: "",
   })
 
   const categories = ["all", ...Array.from(new Set(equipments.map((eq) => eq.category)))]
@@ -94,7 +88,6 @@ export function EquipmentManagement() {
 
   const handleAdd = () => {
     if (!formData.name || !formData.category || formData.total <= 0) return
-
     const newEquipment: Equipment = {
       id: Date.now().toString(),
       name: formData.name,
@@ -103,11 +96,9 @@ export function EquipmentManagement() {
       available: formData.total,
       total: formData.total,
       image: "/placeholder.svg",
-      serialNumbers: formData.serialNumbers.split(",").map((s) => s.trim()),
       location: formData.location,
       condition: formData.condition,
     }
-
     setEquipments([...equipments, newEquipment])
     resetForm()
     setShowAddDialog(false)
@@ -115,7 +106,6 @@ export function EquipmentManagement() {
 
   const handleEdit = () => {
     if (!editingEquipment || !formData.name || !formData.category || formData.total <= 0) return
-
     setEquipments(
       equipments.map((eq) =>
         eq.id === editingEquipment.id
@@ -128,12 +118,10 @@ export function EquipmentManagement() {
               available: Math.min(eq.available, formData.total),
               location: formData.location,
               condition: formData.condition,
-              serialNumbers: formData.serialNumbers.split(",").map((s) => s.trim()),
             }
           : eq,
       ),
     )
-
     resetForm()
     setShowEditDialog(false)
     setEditingEquipment(null)
@@ -154,7 +142,6 @@ export function EquipmentManagement() {
       total: equipment.total,
       location: equipment.location,
       condition: equipment.condition,
-      serialNumbers: equipment.serialNumbers.join(", "),
     })
     setShowEditDialog(true)
   }
@@ -167,7 +154,6 @@ export function EquipmentManagement() {
       total: 0,
       location: "",
       condition: "ดี",
-      serialNumbers: "",
     })
   }
 
@@ -191,7 +177,6 @@ export function EquipmentManagement() {
         </Button>
       </div>
 
-      {/* Search and Filter */}
       <div className="bg-white rounded-lg shadow-sm p-4">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1 relative">
@@ -218,7 +203,6 @@ export function EquipmentManagement() {
         </div>
       </div>
 
-      {/* Equipment Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredEquipments.map((equipment) => (
           <Card key={equipment.id} className="hover:shadow-lg transition-shadow">
@@ -248,10 +232,8 @@ export function EquipmentManagement() {
                 </div>
               </div>
             </CardHeader>
-
             <CardContent className="space-y-3">
               <CardDescription className="text-sm line-clamp-2">{equipment.description}</CardDescription>
-
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">คงเหลือ:</span>
@@ -259,33 +241,15 @@ export function EquipmentManagement() {
                     {equipment.available}/{equipment.total}
                   </Badge>
                 </div>
-
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">สถานที่:</span>
                   <span className="text-sm font-medium">{equipment.location}</span>
                 </div>
-
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">สภาพ:</span>
                   <Badge variant="outline" className="text-xs">
                     {equipment.condition}
                   </Badge>
-                </div>
-              </div>
-
-              <div>
-                <Label className="text-xs font-medium text-gray-600">Serial Numbers:</Label>
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {equipment.serialNumbers.slice(0, 3).map((serial) => (
-                    <Badge key={serial} variant="secondary" className="text-xs">
-                      {serial}
-                    </Badge>
-                  ))}
-                  {equipment.serialNumbers.length > 3 && (
-                    <Badge variant="secondary" className="text-xs">
-                      +{equipment.serialNumbers.length - 3}
-                    </Badge>
-                  )}
                 </div>
               </div>
             </CardContent>
@@ -300,14 +264,12 @@ export function EquipmentManagement() {
         </div>
       )}
 
-      {/* Add Equipment Dialog */}
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>เพิ่มอุปกรณ์ใหม่</DialogTitle>
             <DialogDescription>กรอกข้อมูลอุปกรณ์ที่ต้องการเพิ่มในระบบ</DialogDescription>
           </DialogHeader>
-
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -329,7 +291,6 @@ export function EquipmentManagement() {
                 />
               </div>
             </div>
-
             <div>
               <Label htmlFor="description">คำอธิบาย</Label>
               <Textarea
@@ -340,7 +301,6 @@ export function EquipmentManagement() {
                 rows={3}
               />
             </div>
-
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="total">จำนวนทั้งหมด *</Label>
@@ -363,35 +323,19 @@ export function EquipmentManagement() {
                 />
               </div>
             </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="condition">สภาพ</Label>
-                <Select
-                  value={formData.condition}
-                  onValueChange={(value) => setFormData({ ...formData, condition: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ดี">ดี</SelectItem>
-                    <SelectItem value="ปานกลาง">ปานกลาง</SelectItem>
-                    <SelectItem value="ต้องซ่อม">ต้องซ่อม</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="serialNumbers">Serial Numbers</Label>
-                <Input
-                  id="serialNumbers"
-                  value={formData.serialNumbers}
-                  onChange={(e) => setFormData({ ...formData, serialNumbers: e.target.value })}
-                  placeholder="คั่นด้วยเครื่องหมายจุลภาค"
-                />
-              </div>
+            <div>
+              <Label htmlFor="condition">สภาพ</Label>
+              <Select value={formData.condition} onValueChange={(value) => setFormData({ ...formData, condition: value })}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ดี">ดี</SelectItem>
+                  <SelectItem value="ปานกลาง">ปานกลาง</SelectItem>
+                  <SelectItem value="ต้องซ่อม">ต้องซ่อม</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-
             <div className="flex space-x-2">
               <Button onClick={handleAdd} disabled={!formData.name || !formData.category || formData.total <= 0}>
                 เพิ่มอุปกรณ์
@@ -404,14 +348,12 @@ export function EquipmentManagement() {
         </DialogContent>
       </Dialog>
 
-      {/* Edit Equipment Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>แก้ไขอุปกรณ์</DialogTitle>
             <DialogDescription>แก้ไขข้อมูลอุปกรณ์</DialogDescription>
           </DialogHeader>
-
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -433,7 +375,6 @@ export function EquipmentManagement() {
                 />
               </div>
             </div>
-
             <div>
               <Label htmlFor="edit-description">คำอธิบาย</Label>
               <Textarea
@@ -444,7 +385,6 @@ export function EquipmentManagement() {
                 rows={3}
               />
             </div>
-
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="edit-total">จำนวนทั้งหมด *</Label>
@@ -467,35 +407,19 @@ export function EquipmentManagement() {
                 />
               </div>
             </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="edit-condition">สภาพ</Label>
-                <Select
-                  value={formData.condition}
-                  onValueChange={(value) => setFormData({ ...formData, condition: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ดี">ดี</SelectItem>
-                    <SelectItem value="ปานกลาง">ปานกลาง</SelectItem>
-                    <SelectItem value="ต้องซ่อม">ต้องซ่อม</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="edit-serialNumbers">Serial Numbers</Label>
-                <Input
-                  id="edit-serialNumbers"
-                  value={formData.serialNumbers}
-                  onChange={(e) => setFormData({ ...formData, serialNumbers: e.target.value })}
-                  placeholder="คั่นด้วยเครื่องหมายจุลภาค"
-                />
-              </div>
+            <div>
+              <Label htmlFor="edit-condition">สภาพ</Label>
+              <Select value={formData.condition} onValueChange={(value) => setFormData({ ...formData, condition: value })}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ดี">ดี</SelectItem>
+                  <SelectItem value="ปานกลาง">ปานกลาง</SelectItem>
+                  <SelectItem value="ต้องซ่อม">ต้องซ่อม</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-
             <div className="flex space-x-2">
               <Button onClick={handleEdit} disabled={!formData.name || !formData.category || formData.total <= 0}>
                 บันทึกการแก้ไข
