@@ -6,14 +6,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useAuth } from "@/contexts/auth-context"
-import type { UserRole } from "@/types/auth"
-
-function deriveRole(u: string): UserRole {
-  const v = u.trim().toLowerCase()
-  if (v.startsWith("admin")) return "admin"
-  if (v.startsWith("teacher")) return "teacher"
-  return "student"
-}
 
 export function LoginForm() {
   const [username, setUsername] = useState("")
@@ -26,8 +18,9 @@ export function LoginForm() {
     if (!username || !password) return
     setIsLoading(true)
     try {
-      const role = deriveRole(username)
-      await login(username, password, role)
+      await login(username, password)
+    } catch (err) {
+      alert("เข้าสู่ระบบไม่สำเร็จ")
     } finally {
       setIsLoading(false)
     }
@@ -37,18 +30,22 @@ export function LoginForm() {
     <div className="flex min-h-[70vh] items-center justify-center p-4">
       <Card className="w-full max-w-md border-slate-200/60 shadow-lg">
         <div className="flex flex-col items-center gap-2 pt-8">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1E4B9B] text-white text-lg font-bold shadow-sm">PSU</div>
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1E4B9B] text-white text-lg font-bold shadow-sm">
+            PSU
+          </div>
           <h2 className="text-xl font-semibold text-slate-900">เข้าสู่ระบบ</h2>
-          <p className="text-sm text-slate-500">กรอกชื่อผู้ใช้และรหัสผ่านเพื่อใช้งานระบบ</p>
+          <p className="text-sm text-slate-500">
+            กรอกชื่อผู้ใช้และรหัสผ่านเพื่อใช้งานระบบ
+          </p>
         </div>
         <CardContent className="space-y-5 pt-6 pb-8">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username">ชื่อผู้ใช้ / รหัสนักศึกษา</Label>
+              <Label htmlFor="username">ชื่อผู้ใช้</Label>
               <Input
                 id="username"
                 type="text"
-                placeholder="เช่น student123 หรือ 6510110115"
+                placeholder="เช่น student"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
@@ -79,9 +76,9 @@ export function LoginForm() {
           </form>
           <div className="pt-2 text-center text-sm text-slate-500 space-y-1">
             <div className="font-medium text-slate-600">ข้อมูลทดสอบ</div>
-            <div>นักศึกษา: student123 / password</div>
-            <div>อาจารย์: teacher123 / password</div>
-            <div>ผู้ดูแลระบบ: admin123 / password</div>
+            <div>นักศึกษา: student / password</div>
+            <div>อาจารย์: teacher / password</div>
+            <div>ผู้ดูแลระบบ: admin / password</div>
           </div>
         </CardContent>
       </Card>

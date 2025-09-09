@@ -1,18 +1,20 @@
 export type UserRole = "student" | "teacher" | "admin"
 
 export interface User {
-  id: string
+  userId: string
   username: string
-  role: UserRole
+  password: string
   name: string
-  email?: string
-  studentId?: string
-  department?: string
+  email: string
+  department: string
+  role: UserRole
+  studentCode?: string | null
+  createdAt: string
 }
 
 export interface AuthContextType {
   user: User | null
-  login: (username: string, password: string, role: UserRole) => Promise<void>
+  login: (username: string, password: string) => Promise<void>
   logout: () => void
   isLoading: boolean
 }

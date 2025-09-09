@@ -1,12 +1,35 @@
-"use client"
+import api from "@/lib/axios";
+import { endpoints } from "@/lib/api";
+import type { User } from "@/types/auth";
 
-import { useContext } from "react"
-import { AuthContext } from "@/contexts/auth-context"
+export async function loginApi(username: string, password: string): Promise<User> {
+  const res = await api.get(endpoints.admin.users.getAll);
+  const users: User[] = res.data;
 
-export function useAuth() {
-  const context = useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider")
+  const foundUser = users.find(
+    (u) =>
+      (u.username === username || u.studentCode === username) &&
+      u.password === password
+  );
+
+  if (!foundUser) {
+    throw new Error("Invalid username or password");
   }
-  return context
+
+  const normalizedUser: User = {
+    ...foundUser,
+    role: foundUser.role.toLowerCase() as User["role"],
+  };
+
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("user");
+    localStorage.setItem("user", JSON.stringify(normalizedUser));
+  }
+
+  return normalizedUser;
+}
+
+export async function getUsersApi(): Promise<User[]> {
+  const res = await api.get(endpoints.admin.users.getAll);
+  return res.data;
 }
