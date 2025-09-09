@@ -1,5 +1,6 @@
 package com.example.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -48,6 +49,7 @@ public class BorrowingRequest {
     private String rejectionReason;
 
     @OneToMany(mappedBy = "borrowingRequest", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<BorrowingItem> items;
 
     @PrePersist

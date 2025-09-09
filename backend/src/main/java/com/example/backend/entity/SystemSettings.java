@@ -18,13 +18,12 @@ public class SystemSettings {
     private String currentTerm;
     private String currentYear;
 
-    @Column(nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime updatedAt;
 
     @PrePersist
-    public void prePersist() {
-        if (updatedAt == null) {
-            updatedAt = LocalDateTime.now();
-        }
+    @PreUpdate
+    public void setTimestamps() {
+        updatedAt = LocalDateTime.now();
     }
 }

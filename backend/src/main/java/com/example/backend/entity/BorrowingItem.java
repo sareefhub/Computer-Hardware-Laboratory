@@ -1,5 +1,6 @@
 package com.example.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,6 +17,7 @@ public class BorrowingItem {
 
     @ManyToOne
     @JoinColumn(name = "request_id")
+    @JsonBackReference
     private BorrowingRequest borrowingRequest;
 
     @ManyToOne
