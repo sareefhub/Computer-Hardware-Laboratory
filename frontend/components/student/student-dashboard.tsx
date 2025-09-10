@@ -17,6 +17,7 @@ export function StudentDashboard() {
   const { getAllEquipments } = useEquipments()
 
   const [equipments, setEquipments] = useState<Equipment[]>([])
+  const [cartItems, setCartItems] = useState<{ equipmentId: number; quantity: number }[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [showCart, setShowCart] = useState(false)
@@ -28,6 +29,24 @@ export function StudentDashboard() {
     }
     fetchData()
   }, [])
+
+  const handleAddToCart = (equipmentId: number, quantity: number) => {
+    setCartItems((prev) => {
+      const existing = prev.find((item) => item.equipmentId === equipmentId)
+      if (existing) {
+        return prev.map((item) =>
+          item.equipmentId === equipmentId
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        )
+      }
+      return [...prev, { equipmentId, quantity }]
+    })
+  }
+
+  const handleRemoveItem = (equipmentId: number) => {
+    setCartItems((prev) => prev.filter((item) => item.equipmentId !== equipmentId))
+  }
 
   const categories = ["all", ...Array.from(new Set(equipments.map((eq) => eq.category)))]
   const filteredEquipments = equipments.filter((equipment) => {
@@ -81,7 +100,7 @@ export function StudentDashboard() {
               >
                 <ShoppingCart className="h-4 w-4" />
                 <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs">
-                  0
+                  {cartItems.reduce((sum, item) => sum + item.quantity, 0)}
                 </Badge>
               </Button>
             </div>
@@ -93,7 +112,7 @@ export function StudentDashboard() {
             <EquipmentCard
               key={equipment.equipmentId}
               equipment={equipment}
-              onAddToCart={() => {}}
+              onAddToCart={handleAddToCart}
             />
           ))}
         </div>
@@ -108,9 +127,9 @@ export function StudentDashboard() {
       <BorrowingCart
         isOpen={showCart}
         onClose={() => setShowCart(false)}
-        cartItems={[]} 
+        cartItems={cartItems}
         equipments={equipments}
-        onRemoveItem={() => {}}
+        onRemoveItem={handleRemoveItem}
       />
     </div>
   )
