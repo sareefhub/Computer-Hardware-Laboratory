@@ -5,7 +5,6 @@ echo ===========================
 
 cd /d %~dp0
 
-pnpm install
 pnpm dev
 
 pause
