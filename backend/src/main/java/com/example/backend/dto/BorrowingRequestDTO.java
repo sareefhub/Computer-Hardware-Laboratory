@@ -18,10 +18,7 @@ public class BorrowingRequestDTO {
     private LocalDateTime requestDate;
 
     private String studentId;
-    private String studentName;
-
     private String teacherId;
-    private String teacherName;
 
     private List<ItemDTO> items;
 
@@ -31,7 +28,7 @@ public class BorrowingRequestDTO {
     @Builder
     public static class ItemDTO {
         private Integer equipmentId;
-        private String equipmentName;
         private Integer quantity;
+        private String equipmentName;
     }
 }

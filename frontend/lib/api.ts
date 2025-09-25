@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api"
 
 export const endpoints = {
   auth: {
@@ -7,6 +7,8 @@ export const endpoints = {
   student: {
     equipments: `${API_URL}/equipments`,
     borrowingRequests: `${API_URL}/borrowing-requests`,
+    borrowingRequestsByStudent: (studentId: string) =>
+      `${API_URL}/borrowing-requests/student/${studentId}`,
   },
   teacher: {
     getAllBorrowing: `${API_URL}/borrowing-requests`,
@@ -23,9 +25,9 @@ export const endpoints = {
       readPicture: (id: string) => `${API_URL}/equipments/${id}/picture`,
     },
     borrowing: {
-      updatePrepare: (id: string) => `${API_URL}/borrowing/${id}/prepare`,
-      updateBorrow: (id: string) => `${API_URL}/borrowing/${id}/borrow`,
-      updateReturn: (id: string) => `${API_URL}/borrowing/${id}/return`,
+      updatePrepare: (id: string) => `${API_URL}/borrowing-requests/${id}/prepare`,
+      updateBorrow: (id: string) => `${API_URL}/borrowing-requests/${id}/borrow`,
+      updateReturn: (id: string) => `${API_URL}/borrowing-requests/${id}/return`,
     },
     settings: {
       create: `${API_URL}/settings`,
@@ -36,6 +38,6 @@ export const endpoints = {
       getAll: `${API_URL}/users`,
     },
   },
-};
+}
 
-export default API_URL;
+export default API_URL

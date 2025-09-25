@@ -28,6 +28,11 @@ public class EquipmentController {
         return equipmentService.save(equipment);
     }
 
+    @PostMapping("/bulk")
+    public List<Equipment> createEquipments(@RequestBody List<Equipment> equipments) {
+        return equipmentService.saveAll(equipments);
+    }
+
     @PutMapping("/{id}")
     public Equipment updateEquipment(@PathVariable Integer id, @RequestBody Equipment equipment) {
         equipment.setEquipmentId(id);

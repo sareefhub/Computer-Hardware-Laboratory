@@ -25,4 +25,9 @@ public class BorrowingItem {
     private Equipment equipment;
 
     private Integer quantity;
+
+    @Transient
+    public String getEquipmentName() {
+        return equipment != null ? equipment.getName() : null;
+    }
 }

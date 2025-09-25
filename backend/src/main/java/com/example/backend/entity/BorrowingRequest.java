@@ -14,15 +14,15 @@ import java.util.List;
 @Builder
 public class BorrowingRequest {
     @Id
-    @Column(name = "request_id")
+    @Column(name = "request_id", nullable = false, updatable = false)
     private String requestId;
 
     @ManyToOne
-    @JoinColumn(name = "student_id")
+    @JoinColumn(name = "student_id", nullable = false)
     private User student;
 
     @ManyToOne
-    @JoinColumn(name = "teacher_id")
+    @JoinColumn(name = "teacher_id", nullable = false)
     private User teacher;
 
     private String course;
@@ -33,7 +33,7 @@ public class BorrowingRequest {
     @Column(columnDefinition = "TEXT")
     private String notes;
 
-    @Column(nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(nullable = false, updatable = false)
     private LocalDateTime requestDate;
 
     private Integer statusCode;
@@ -48,14 +48,20 @@ public class BorrowingRequest {
     @Column(columnDefinition = "TEXT")
     private String rejectionReason;
 
-    @OneToMany(mappedBy = "borrowingRequest", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "borrowingRequest", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<BorrowingItem> items;
 
     @PrePersist
     public void prePersist() {
+        if (requestId == null) {
+            requestId = java.util.UUID.randomUUID().toString();
+        }
         if (requestDate == null) {
             requestDate = LocalDateTime.now();
+        }
+        if (statusCode == null) {
+            statusCode = 1;
         }
     }
 }

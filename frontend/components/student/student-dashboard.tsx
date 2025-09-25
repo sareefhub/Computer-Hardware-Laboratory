@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -12,12 +13,20 @@ import { Search, ShoppingCart } from "lucide-react"
 import { useEquipments } from "@/hooks/use-equipments"
 import type { Equipment } from "@/types/equipment"
 
+interface CartItem {
+  equipmentId: number
+  quantity: number
+  name: string
+  available: number
+}
+
 export function StudentDashboard() {
   const { user } = useAuth()
   const { getAllEquipments } = useEquipments()
+  const router = useRouter()
 
   const [equipments, setEquipments] = useState<Equipment[]>([])
-  const [cartItems, setCartItems] = useState<{ equipmentId: number; quantity: number }[]>([])
+  const [cartItems, setCartItems] = useState<CartItem[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [showCart, setShowCart] = useState(false)
@@ -31,6 +40,9 @@ export function StudentDashboard() {
   }, [])
 
   const handleAddToCart = (equipmentId: number, quantity: number) => {
+    const equipment = equipments.find((eq) => eq.equipmentId === equipmentId)
+    if (!equipment) return
+
     setCartItems((prev) => {
       const existing = prev.find((item) => item.equipmentId === equipmentId)
       if (existing) {
@@ -40,7 +52,15 @@ export function StudentDashboard() {
             : item
         )
       }
-      return [...prev, { equipmentId, quantity }]
+      return [
+        ...prev,
+        {
+          equipmentId,
+          quantity,
+          name: equipment.name,
+          available: equipment.availableQuantity,
+        },
+      ]
     })
   }
 
@@ -130,6 +150,11 @@ export function StudentDashboard() {
         cartItems={cartItems}
         equipments={equipments}
         onRemoveItem={handleRemoveItem}
+        onConfirm={() => {
+          setShowCart(false)
+          localStorage.setItem("cartItems", JSON.stringify(cartItems))
+          router.push("/student/confirm")
+        }}
       />
     </div>
   )

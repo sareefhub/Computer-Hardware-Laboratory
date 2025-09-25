@@ -2,7 +2,8 @@ package com.example.backend.repository;
 
 import com.example.backend.entity.BorrowingRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
 public interface BorrowingRequestRepository extends JpaRepository<BorrowingRequest, String> {
-    long countByStudent_UserId(String userId);
+    List<BorrowingRequest> findByStudent_StudentCode(String studentCode);
 }

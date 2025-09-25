@@ -25,6 +25,10 @@ public class EquipmentService {
         return equipmentRepository.save(equipment);
     }
 
+    public List<Equipment> saveAll(List<Equipment> equipments) {
+        return equipmentRepository.saveAll(equipments);
+    }
+
     public void delete(Integer id) {
         equipmentRepository.deleteById(id);
     }

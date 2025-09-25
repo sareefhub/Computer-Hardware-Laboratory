@@ -25,6 +25,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const loggedInUser = await loginApi(username, password)
       setUser(loggedInUser)
+      localStorage.setItem("user", JSON.stringify(loggedInUser))
       if (loggedInUser.role === "student") {
         router.push("/student")
       } else if (loggedInUser.role === "teacher") {
@@ -45,7 +46,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     router.push("/")
   }
 
-  return <AuthContext.Provider value={{ user, login, logout, isLoading }}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+      {children}
+    </AuthContext.Provider>
+  )
 }
 
 export function useAuth() {
