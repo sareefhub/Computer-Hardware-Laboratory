@@ -16,6 +16,12 @@ public class BorrowingRequestDTO {
     private String priority;
     private Integer statusCode;
     private LocalDateTime requestDate;
+    private LocalDateTime borrowedDate;
+    private LocalDateTime dueDate;
+    private LocalDateTime returnedDate;
+    private LocalDateTime approvedDate;
+    private LocalDateTime rejectedDate;
+    private String rejectionReason;
 
     private String studentId;
     private String studentName;

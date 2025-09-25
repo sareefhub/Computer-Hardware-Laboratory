@@ -45,16 +45,22 @@ export function TeacherDashboard() {
   const loadRequests = async () => {
     const res = await fetch(endpoints.teacher.getAllBorrowing)
     const data = await res.json()
-    setRequests(data)
+    const mapped = data.map((r: any) => ({
+      ...r,
+      approvedDate: r.approvedDate || r.approved_date,
+      rejectedDate: r.rejectedDate || r.rejected_date,
+      rejectionReason: r.rejectionReason || r.rejection_reason,
+    }))
+    setRequests(mapped)
   }
 
   const statusMap: Record<number, string> = {
-    1: "รอการอนุมัติจากอาจารย์",
-    2: "กำลังเตรียม",
-    3: "เตรียมเสร็จ",
-    4: "กำลังยืม",
-    5: "คืนแล้ว",
-    6: "ไม่อนุมัติ",
+    1: "รออนุมัติ",
+    0: "ไม่อนุมัติ",
+    2: "อนุมัติแล้ว",
+    3: "อนุมัติแล้ว",
+    4: "อนุมัติแล้ว",
+    5: "อนุมัติแล้ว",
   }
 
   const filteredRequests = requests.filter((request) => {
@@ -69,12 +75,12 @@ export function TeacherDashboard() {
   })
 
   const pendingCount = requests.filter((req) => req.statusCode === 1).length
-  const approvedCount = requests.filter((req) => req.statusCode === 4).length
-  const rejectedCount = requests.filter((req) => req.statusCode === 6).length
+  const approvedCount = requests.filter((req) => [2, 3, 4, 5].includes(req.statusCode)).length
+  const rejectedCount = requests.filter((req) => req.statusCode === 0).length
 
   const handleApprove = async (requestId: string) => {
     await fetch(endpoints.teacher.approveRequest(requestId), { method: "PUT" })
-    loadRequests()
+    await loadRequests()
   }
 
   const handleReject = async (requestId: string, reason: string) => {
@@ -83,7 +89,7 @@ export function TeacherDashboard() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ reason }),
     })
-    loadRequests()
+    await loadRequests()
   }
 
   return (
@@ -170,7 +176,7 @@ export function TeacherDashboard() {
               className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="all">ทุกสถานะ</option>
-              <option value="รอการอนุมัติ">รอการอนุมัติ</option>
+              <option value="รออนุมัติ">รออนุมัติ</option>
               <option value="อนุมัติแล้ว">อนุมัติแล้ว</option>
               <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
             </select>
@@ -199,12 +205,12 @@ export function TeacherDashboard() {
                   status: statusMap[request.statusCode] || "อื่นๆ",
                   statusEmoji:
                     request.statusCode === 1
-                      ? "👨‍🏫"
-                      : request.statusCode === 4
-                      ? "✅"
-                      : request.statusCode === 6
+                      ? "⏳"
+                      : [2, 3, 4, 5].includes(request.statusCode)
+                      ? "📦"
+                      : request.statusCode === 0
                       ? "❌"
-                      : "📦",
+                      : "❔",
                   items: request.items,
                   priority: request.priority,
                   approvedDate: request.approvedDate,

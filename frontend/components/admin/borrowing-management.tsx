@@ -5,11 +5,14 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
-import { Search, User, Calendar, Package, ArrowRight } from "lucide-react"
+import { Search, User, Calendar, Package } from "lucide-react"
 import { endpoints } from "@/lib/api"
 
-type BorrowItem = { name: string; quantity: number }
+interface BorrowingItem {
+  equipmentId: number
+  equipmentName: string
+  quantity: number
+}
 
 type BorrowingRequest = {
   requestId: string
@@ -25,11 +28,14 @@ type BorrowingRequest = {
   approvedDate?: string
   rejectedDate?: string
   rejectionReason?: string
-  items: BorrowItem[]
+  borrowedDate?: string
+  dueDate?: string
+  returnedDate?: string
+  items: BorrowingItem[]
 }
 
 const statusOptions = [
-  { code: 1, label: "รอการอนุมัติจากอาจารย์", emoji: "👨‍🏫", color: "bg-yellow-100 text-yellow-800" },
+  { code: 1, label: "รอการอนุมัติจากอาจารย์", emoji: "⏳", color: "bg-yellow-100 text-yellow-800" },
   { code: 2, label: "เจ้าหน้าที่กำลังเตรียมอุปกรณ์", emoji: "🔧", color: "bg-blue-100 text-blue-800" },
   { code: 3, label: "เจ้าหน้าที่เตรียมอุปกรณ์เสร็จแล้ว", emoji: "✅", color: "bg-green-100 text-green-800" },
   { code: 4, label: "เบิกแล้วรอการคืนอุปกรณ์", emoji: "📦", color: "bg-orange-100 text-orange-800" },
@@ -72,7 +78,7 @@ export function BorrowingManagement() {
       request.studentId.includes(searchTerm) ||
       request.course.toLowerCase().includes(s) ||
       request.requestId.includes(searchTerm)
-    const isVisibleForAdmin = request.statusCode >= 2
+    const isVisibleForAdmin = request.statusCode >= 1
     return matchesSearch && isVisibleForAdmin
   })
 
@@ -121,10 +127,10 @@ export function BorrowingManagement() {
             <p className="text-gray-500 text-lg">ไม่พบคำขอที่ค้นหา</p>
           </div>
         ) : (
-          filteredRequests.map((request) => {
+          filteredRequests.map((request, reqIndex) => {
             const status = getStatus(request.statusCode)
             return (
-              <Card key={request.requestId} className="hover:shadow-md transition-shadow">
+              <Card key={`${request.requestId}-${reqIndex}`} className="hover:shadow-md transition-shadow">
                 <CardHeader>
                   <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
                     <div className="flex-1">
@@ -166,10 +172,13 @@ export function BorrowingManagement() {
                       <Label className="text-sm font-medium">รายการอุปกรณ์</Label>
                     </div>
                     <div className="space-y-2">
-                      {request.items.map((item, index) => (
-                        <div key={index} className="bg-gray-50 rounded-lg p-3">
+                      {request.items.map((item, itemIndex) => (
+                        <div
+                          key={`${request.requestId}-${item.equipmentId}-${itemIndex}`}
+                          className="bg-gray-50 rounded-lg p-3"
+                        >
                           <div className="flex justify-between items-start mb-1">
-                            <span className="font-medium text-sm">{item.name}</span>
+                            <span className="font-medium text-sm">{item.equipmentName}</span>
                             <Badge variant="outline" className="text-xs">
                               จำนวน: {item.quantity}
                             </Badge>
@@ -179,10 +188,71 @@ export function BorrowingManagement() {
                     </div>
                   </div>
 
-                  {request.statusCode < 5 && (
-                    <Button onClick={() => nextStatus(request)} className="w-full flex items-center gap-2">
-                      ดำเนินการขั้นถัดไป <ArrowRight className="h-4 w-4" />
-                    </Button>
+                  {request.statusCode === 1 && (
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-yellow-800 text-sm">
+                      หมายเหตุ: รอการอนุมัติจากอาจารย์ก่อนที่จะสามารถดำเนินการต่อได้
+                    </div>
+                  )}
+
+                  {request.statusCode === 2 && (
+                    <div
+                      onClick={() => nextStatus(request)}
+                      className="cursor-pointer bg-black text-white rounded-lg p-3 text-sm flex items-center gap-2"
+                    >
+                      ➔ อัปเดตเป็น: ✅ เจ้าหน้าที่เตรียมอุปกรณ์เสร็จแล้ว
+                    </div>
+                  )}
+
+                  {request.statusCode === 3 && (
+                    <div className="space-y-2">
+                      <div
+                        onClick={() => nextStatus(request)}
+                        className="cursor-pointer bg-black text-white rounded-lg p-3 text-sm flex items-center gap-2"
+                      >
+                        ➔ อัปเดตเป็น: 📦 เบิกแล้วรอการคืนอุปกรณ์
+                      </div>
+                      {request.borrowedDate && (
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-blue-800 text-sm">
+                          วันที่เบิก: {new Date(request.borrowedDate).toLocaleDateString("th-TH")} <br />
+                          กำหนดคืน: {request.dueDate && new Date(request.dueDate).toLocaleDateString("th-TH")}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {request.statusCode === 4 && (
+                    <div className="space-y-2">
+                      {request.borrowedDate && (
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-blue-800 text-sm">
+                          วันที่เบิก: {new Date(request.borrowedDate).toLocaleDateString("th-TH")} <br />
+                          กำหนดคืน: {request.dueDate && new Date(request.dueDate).toLocaleDateString("th-TH")}
+                        </div>
+                      )}
+                      {request.returnedDate && (
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-green-800 text-sm">
+                          วันที่คืน: {new Date(request.returnedDate).toLocaleDateString("th-TH")}
+                        </div>
+                      )}
+                      <div
+                        onClick={() => nextStatus(request)}
+                        className="cursor-pointer bg-black text-white rounded-lg p-3 text-sm flex items-center gap-2"
+                      >
+                        ➔ อัปเดตเป็น: 🔄 คืนอุปกรณ์เสร็จแล้ว
+                      </div>
+                    </div>
+                  )}
+
+                  {request.statusCode === 5 && (
+                    <div className="space-y-2">
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-blue-800 text-sm">
+                        วันที่เบิก: {request.borrowedDate && new Date(request.borrowedDate).toLocaleDateString("th-TH")}{" "}
+                        <br />
+                        กำหนดคืน: {request.dueDate && new Date(request.dueDate).toLocaleDateString("th-TH")}
+                      </div>
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-green-800 text-sm">
+                        วันที่คืน: {request.returnedDate && new Date(request.returnedDate).toLocaleDateString("th-TH")}
+                      </div>
+                    </div>
                   )}
                 </CardContent>
               </Card>
