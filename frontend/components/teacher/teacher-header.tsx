@@ -1,14 +1,32 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { useAuth } from "@/contexts/auth-context"
 import { LogOut, Bell, Home } from "lucide-react"
 import Link from "next/link"
+import { endpoints } from "@/lib/api"
 
 export function TeacherHeader() {
   const { user, logout } = useAuth()
-  const pendingCount = 2
+  const [pendingCount, setPendingCount] = useState(0)
+
+  useEffect(() => {
+    const loadPending = async () => {
+      try {
+        const res = await fetch(endpoints.teacher.getAllBorrowing)
+        if (res.ok) {
+          const data = await res.json()
+          const pending = data.filter((req: any) => req.statusCode === 1).length
+          setPendingCount(pending)
+        }
+      } catch (err) {
+        console.error("Failed to fetch pending requests:", err)
+      }
+    }
+    loadPending()
+  }, [])
 
   return (
     <header className="relative z-50 bg-gradient-to-r from-[#153E90] via-[#1E4B9B] to-[#2E6BC6] shadow">

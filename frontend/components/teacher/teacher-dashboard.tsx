@@ -1,30 +1,30 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { useAuth } from "@/contexts/auth-context"
 import { TeacherHeader } from "./teacher-header"
 import { BorrowingRequestCard } from "./borrowing-request-card"
 import { Search, Bell, CheckCircle, XCircle, Clock } from "lucide-react"
+import { endpoints } from "@/lib/api"
 
 type BorrowingItem = {
-  name: string
+  equipmentId: number
+  equipmentName: string
   quantity: number
-  serialNumbers: string[]
 }
 
 type BorrowingRequest = {
-  id: string
+  requestId: string
   studentId: string
   studentName: string
-  studentEmail: string
+  studentCode: string
   course: string
   reason: string
   notes: string
   requestDate: string
-  status: string
-  statusEmoji: string
+  statusCode: number
   items: BorrowingItem[]
   priority: "normal" | "urgent"
   approvedDate?: string
@@ -32,126 +32,58 @@ type BorrowingRequest = {
   rejectionReason?: string
 }
 
-const mockRequests: BorrowingRequest[] = [
-  {
-    id: "BR1703123456789",
-    studentId: "65010001",
-    studentName: "นายสมชาย ใจดี",
-    studentEmail: "student@university.ac.th",
-    course: "CPE101 - Computer Programming",
-    reason: "Assignment - งานที่ได้รับมอบหมาย",
-    notes: "ต้องการใช้สำหรับทำงานที่ได้รับมอบหมายในสัปดาห์นี้",
-    requestDate: "2024-01-15T10:30:00",
-    status: "รอการอนุมัติจากอาจารย์",
-    statusEmoji: "👨‍🏫",
-    items: [
-      { name: "Arduino Uno R3", quantity: 2, serialNumbers: ["ARD001", "ARD002"] },
-      { name: "Breadboard", quantity: 1, serialNumbers: ["BB001"] }
-    ],
-    priority: "normal"
-  },
-  {
-    id: "BR1703123456790",
-    studentId: "65010002",
-    studentName: "นางสาวสมหญิง ใจงาม",
-    studentEmail: "student2@university.ac.th",
-    course: "CPE102 - Digital Logic Design",
-    reason: "Lab - การทดลอง",
-    notes: "สำหรับการทดลองในห้องแลป วันพุธที่ 17 มกราคม",
-    requestDate: "2024-01-14T14:15:00",
-    status: "รอการอนุมัติจากอาจารย์",
-    statusEmoji: "👨‍🏫",
-    items: [
-      { name: "Digital Multimeter", quantity: 1, serialNumbers: ["DMM001"] },
-      { name: "Oscilloscope", quantity: 1, serialNumbers: ["OSC001"] }
-    ],
-    priority: "urgent"
-  },
-  {
-    id: "BR1703123456791",
-    studentId: "65010003",
-    studentName: "นายสมศักดิ์ ใจดี",
-    studentEmail: "student3@university.ac.th",
-    course: "CPE201 - Data Structures",
-    reason: "Project - โครงงาน",
-    notes: "โครงงานกลุ่ม 4 คน ต้องการใช้เป็นเวลา 2 สัปดาห์",
-    requestDate: "2024-01-13T09:45:00",
-    status: "อนุมัติแล้ว",
-    statusEmoji: "✅",
-    items: [{ name: "Raspberry Pi 4", quantity: 2, serialNumbers: ["RPI001", "RPI002"] }],
-    priority: "normal",
-    approvedDate: "2024-01-13T11:00:00"
-  },
-  {
-    id: "BR1703123456792",
-    studentId: "65010004",
-    studentName: "นางสาวสมใจ รักเรียน",
-    studentEmail: "student4@university.ac.th",
-    course: "CPE101 - Computer Programming",
-    reason: "Assignment - งานที่ได้รับมอบหมาย",
-    notes: "งานเดี่ยว ต้องการใช้ 3 วัน",
-    requestDate: "2024-01-12T16:20:00",
-    status: "ไม่อนุมัติ",
-    statusEmoji: "❌",
-    items: [{ name: "Arduino Uno R3", quantity: 5, serialNumbers: ["ARD003", "ARD004", "ARD005", "ARD006", "ARD007"] }],
-    priority: "normal",
-    rejectedDate: "2024-01-12T17:00:00",
-    rejectionReason: "จำนวนมากเกินไปสำหรับงานเดี่ยว"
-  }
-]
-
 export function TeacherDashboard() {
   const { user } = useAuth()
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
-  const [requests, setRequests] = useState<BorrowingRequest[]>(mockRequests)
+  const [requests, setRequests] = useState<BorrowingRequest[]>([])
+
+  useEffect(() => {
+    loadRequests()
+  }, [])
+
+  const loadRequests = async () => {
+    const res = await fetch(endpoints.teacher.getAllBorrowing)
+    const data = await res.json()
+    setRequests(data)
+  }
+
+  const statusMap: Record<number, string> = {
+    1: "รอการอนุมัติจากอาจารย์",
+    2: "กำลังเตรียม",
+    3: "เตรียมเสร็จ",
+    4: "กำลังยืม",
+    5: "คืนแล้ว",
+    6: "ไม่อนุมัติ",
+  }
 
   const filteredRequests = requests.filter((request) => {
     const q = searchTerm.toLowerCase()
     const matchesSearch =
-      request.studentName.toLowerCase().includes(q) ||
-      request.studentId.includes(searchTerm) ||
+      request.studentName?.toLowerCase().includes(q) ||
+      request.studentCode?.includes(searchTerm) ||
       request.course.toLowerCase().includes(q)
-    const matchesStatus = statusFilter === "all" || request.status.includes(statusFilter)
+    const statusText = statusMap[request.statusCode] || "อื่นๆ"
+    const matchesStatus = statusFilter === "all" || statusText.includes(statusFilter)
     return matchesSearch && matchesStatus
   })
 
-  const pendingCount = requests.filter((req) => req.status === "รอการอนุมัติจากอาจารย์").length
-  const approvedCount = requests.filter((req) => req.status === "อนุมัติแล้ว").length
-  const rejectedCount = requests.filter((req) => req.status === "ไม่อนุมัติ").length
+  const pendingCount = requests.filter((req) => req.statusCode === 1).length
+  const approvedCount = requests.filter((req) => req.statusCode === 4).length
+  const rejectedCount = requests.filter((req) => req.statusCode === 6).length
 
-  const handleApprove = (requestId: string) => {
-    setRequests((prev: BorrowingRequest[]) =>
-      prev.map((req) =>
-        req.id === requestId
-          ? {
-              ...req,
-              status: "อนุมัติแล้ว",
-              statusEmoji: "✅",
-              approvedDate: new Date().toISOString(),
-              rejectedDate: req.rejectedDate && undefined,
-              rejectionReason: req.rejectionReason && undefined
-            }
-          : req
-      )
-    )
+  const handleApprove = async (requestId: string) => {
+    await fetch(endpoints.teacher.approveRequest(requestId), { method: "PUT" })
+    loadRequests()
   }
 
-  const handleReject = (requestId: string, reason: string) => {
-    setRequests((prev: BorrowingRequest[]) =>
-      prev.map((req) =>
-        req.id === requestId
-          ? {
-              ...req,
-              status: "ไม่อนุมัติ",
-              statusEmoji: "❌",
-              rejectedDate: new Date().toISOString(),
-              rejectionReason: reason,
-              approvedDate: req.approvedDate && undefined
-            }
-          : req
-      )
-    )
+  const handleReject = async (requestId: string, reason: string) => {
+    await fetch(endpoints.teacher.rejectRequest(requestId), {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reason }),
+    })
+    loadRequests()
   }
 
   return (
@@ -239,7 +171,7 @@ export function TeacherDashboard() {
             >
               <option value="all">ทุกสถานะ</option>
               <option value="รอการอนุมัติ">รอการอนุมัติ</option>
-              <option value="อนุมัติ">อนุมัติแล้ว</option>
+              <option value="อนุมัติแล้ว">อนุมัติแล้ว</option>
               <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
             </select>
           </div>
@@ -254,8 +186,31 @@ export function TeacherDashboard() {
           ) : (
             filteredRequests.map((request) => (
               <BorrowingRequestCard
-                key={request.id}
-                request={request}
+                key={request.requestId}
+                request={{
+                  id: request.requestId,
+                  studentId: request.studentId,
+                  studentCode: request.studentCode,
+                  studentName: request.studentName,
+                  course: request.course,
+                  reason: request.reason,
+                  notes: request.notes,
+                  requestDate: request.requestDate,
+                  status: statusMap[request.statusCode] || "อื่นๆ",
+                  statusEmoji:
+                    request.statusCode === 1
+                      ? "👨‍🏫"
+                      : request.statusCode === 4
+                      ? "✅"
+                      : request.statusCode === 6
+                      ? "❌"
+                      : "📦",
+                  items: request.items,
+                  priority: request.priority,
+                  approvedDate: request.approvedDate,
+                  rejectedDate: request.rejectedDate,
+                  rejectionReason: request.rejectionReason,
+                }}
                 onApprove={handleApprove}
                 onReject={handleReject}
               />

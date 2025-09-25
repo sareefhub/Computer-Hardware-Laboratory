@@ -18,6 +18,8 @@ public class BorrowingRequestDTO {
     private LocalDateTime requestDate;
 
     private String studentId;
+    private String studentName;
+    private String studentCode;
     private String teacherId;
 
     private List<ItemDTO> items;

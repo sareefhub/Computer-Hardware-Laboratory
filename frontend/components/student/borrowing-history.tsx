@@ -22,6 +22,8 @@ interface BorrowingRequest {
   items: BorrowingItem[]
   returnDate?: string
   dueDate?: string
+  studentName?: string
+  studentCode?: string
 }
 
 export function BorrowingHistory() {
@@ -110,6 +112,15 @@ export function BorrowingHistory() {
                         <Badge className={status.color}>{status.text}</Badge>
                       </div>
                     </div>
+                    <div className="mt-3 bg-gray-50 rounded-lg p-3">
+                      <h4 className="font-medium text-sm text-gray-700 mb-2">ข้อมูลนักศึกษา</h4>
+                      <p className="text-sm">
+                        <strong>ชื่อ: </strong> {record.studentName || "-"}
+                      </p>
+                      <p className="text-sm">
+                        <strong>รหัสนักศึกษา: </strong> {record.studentCode || "-"}
+                      </p>
+                    </div>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -128,9 +139,7 @@ export function BorrowingHistory() {
                         {record.items.map((item, index) => (
                           <div key={index} className="bg-gray-50 rounded-lg p-3">
                             <div className="flex justify-between items-start mb-1">
-                              <span className="font-medium text-sm">
-                                {item.equipmentName}
-                              </span>
+                              <span className="font-medium text-sm">{item.equipmentName}</span>
                               <Badge variant="outline" className="text-xs">
                                 จำนวน: {item.quantity}
                               </Badge>

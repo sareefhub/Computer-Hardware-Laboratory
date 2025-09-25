@@ -9,18 +9,24 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Calendar, User, BookOpen, MessageSquare, Package, CheckCircle, XCircle, AlertTriangle } from "lucide-react"
 
+interface BorrowingItem {
+  equipmentId: number
+  equipmentName: string
+  quantity: number
+}
+
 interface BorrowingRequest {
   id: string
   studentId: string
   studentName: string
-  studentEmail: string
+  studentCode: string
   course: string
   reason: string
   notes: string
   requestDate: string
   status: string
   statusEmoji: string
-  items: Array<{ name: string; quantity: number; serialNumbers: string[] }>
+  items: BorrowingItem[]
   priority: "normal" | "urgent"
   approvedDate?: string
   rejectedDate?: string
@@ -93,6 +99,15 @@ export function BorrowingRequestCard({ request, onApprove, onReject }: Borrowing
                   </span>
                 </div>
               </CardDescription>
+              <div className="mt-3 bg-gray-50 rounded-lg p-3">
+                <h4 className="font-medium text-sm text-gray-700 mb-2">ข้อมูลนักศึกษา</h4>
+                <p className="text-sm">
+                  <strong>ชื่อ: </strong> {request.studentName}
+                </p>
+                <p className="text-sm">
+                  <strong>รหัสนักศึกษา: </strong> {request.studentCode}
+                </p>
+              </div>
             </div>
             <div className="flex items-center space-x-2">
               <span className="text-2xl">{request.statusEmoji}</span>
@@ -102,14 +117,13 @@ export function BorrowingRequestCard({ request, onApprove, onReject }: Borrowing
         </CardHeader>
 
         <CardContent className="space-y-4">
-          {/* Student Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
                 <User className="h-4 w-4 text-gray-500" />
                 <div>
                   <p className="font-medium text-sm">{request.studentName}</p>
-                  <p className="text-xs text-gray-500">{request.studentId}</p>
+                  <p className="text-xs text-gray-500">{request.studentCode}</p>
                 </div>
               </div>
             </div>
@@ -124,7 +138,6 @@ export function BorrowingRequestCard({ request, onApprove, onReject }: Borrowing
             </div>
           </div>
 
-          {/* Notes */}
           {request.notes && (
             <div className="bg-gray-50 rounded-lg p-3">
               <div className="flex items-start space-x-2">
@@ -137,7 +150,6 @@ export function BorrowingRequestCard({ request, onApprove, onReject }: Borrowing
             </div>
           )}
 
-          {/* Equipment List */}
           <div>
             <div className="flex items-center space-x-2 mb-3">
               <Package className="h-4 w-4 text-gray-500" />
@@ -145,29 +157,18 @@ export function BorrowingRequestCard({ request, onApprove, onReject }: Borrowing
             </div>
             <div className="space-y-2">
               {request.items.map((item, index) => (
-                <div key={index} className="border rounded-lg p-3 bg-white">
-                  <div className="flex justify-between items-start mb-2">
-                    <h5 className="font-medium text-sm">{item.name}</h5>
+                <div key={index} className="bg-gray-50 rounded-lg p-3">
+                  <div className="flex justify-between items-start">
+                    <span className="font-medium text-sm">{item.equipmentName}</span>
                     <Badge variant="outline" className="text-xs">
                       จำนวน: {item.quantity}
                     </Badge>
-                  </div>
-                  <div>
-                    <Label className="text-xs font-medium text-gray-600">Serial Numbers:</Label>
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      {item.serialNumbers.map((serial) => (
-                        <Badge key={serial} variant="secondary" className="text-xs">
-                          {serial}
-                        </Badge>
-                      ))}
-                    </div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Approval/Rejection Info */}
           {request.approvedDate && (
             <div className="bg-green-50 border border-green-200 rounded-lg p-3">
               <p className="text-sm text-green-800">
@@ -191,7 +192,6 @@ export function BorrowingRequestCard({ request, onApprove, onReject }: Borrowing
             </div>
           )}
 
-          {/* Action Buttons */}
           {isPending && (
             <div className="flex space-x-2 pt-2">
               <Button onClick={() => onApprove(request.id)} className="flex-1 bg-green-600 hover:bg-green-700">
@@ -211,7 +211,6 @@ export function BorrowingRequestCard({ request, onApprove, onReject }: Borrowing
         </CardContent>
       </Card>
 
-      {/* Rejection Dialog */}
       <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
         <DialogContent>
           <DialogHeader>

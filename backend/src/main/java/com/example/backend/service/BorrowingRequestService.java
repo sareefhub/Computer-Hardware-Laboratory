@@ -122,7 +122,7 @@ public class BorrowingRequestService {
         String studentCode = student.getStudentCode();
         String year = String.valueOf(LocalDateTime.now().getYear() + 543);
         long count = borrowingRequestRepository.count() + 1;
-        return count + "/" + year + "-" + studentCode + "-" + String.format("%03d", count);
+        return count + "-" + year + "-" + studentCode + "-" + String.format("%03d", count);
     }
 
     public BorrowingRequestDTO toDto(BorrowingRequest request) {
@@ -135,6 +135,8 @@ public class BorrowingRequestService {
                 .statusCode(request.getStatusCode())
                 .requestDate(request.getRequestDate())
                 .studentId(request.getStudent().getUserId())
+                .studentName(request.getStudent().getName())
+                .studentCode(request.getStudent().getStudentCode())
                 .teacherId(request.getTeacher().getUserId())
                 .items(request.getItems().stream().map(item ->
                         BorrowingRequestDTO.ItemDTO.builder()
