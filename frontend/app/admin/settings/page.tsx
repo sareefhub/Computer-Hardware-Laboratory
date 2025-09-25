@@ -7,22 +7,59 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
 import { AdminHeader } from "@/components/admin/admin-header"
+import { endpoints } from "@/lib/api"
+
+type Setting = {
+  id: number
+  currentTerm: string
+  currentYear: string
+  updatedAt: string
+}
 
 export default function AdminSettingsPage() {
-  const [term, setTerm] = useState("1")
-  const [year, setYear] = useState("2568")
+  const [term, setTerm] = useState("")
+  const [year, setYear] = useState("")
+  const [settingId, setSettingId] = useState<number | null>(null)
 
   useEffect(() => {
-    const savedTerm = localStorage.getItem("currentTerm")
-    const savedYear = localStorage.getItem("currentYear")
-    if (savedTerm) setTerm(savedTerm)
-    if (savedYear) setYear(savedYear)
+    loadSettings()
   }, [])
 
-  const handleSave = () => {
-    localStorage.setItem("currentTerm", term)
-    localStorage.setItem("currentYear", year)
-    toast.success("บันทึกการตั้งค่าเรียบร้อยแล้ว")
+  const loadSettings = async () => {
+    try {
+      const res = await fetch(endpoints.admin.settings.read)
+      if (!res.ok) throw new Error("โหลดข้อมูลไม่สำเร็จ")
+      const data: Setting[] = await res.json()
+      if (data.length > 0) {
+        setTerm(data[0].currentTerm)
+        setYear(data[0].currentYear)
+        setSettingId(data[0].id)
+      }
+    } catch (err) {
+      console.error(err)
+      toast.error("ไม่สามารถโหลดการตั้งค่าได้")
+    }
+  }
+
+  const handleSave = async () => {
+    if (!settingId) {
+      toast.error("ไม่พบ ID ของการตั้งค่า")
+      return
+    }
+    try {
+      const payload = { currentTerm: term, currentYear: year }
+      const res = await fetch(endpoints.admin.settings.update(settingId.toString()), {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+      if (!res.ok) throw new Error("อัปเดตไม่สำเร็จ")
+      toast.success("อัปเดตการตั้งค่าเรียบร้อยแล้ว")
+      loadSettings()
+    } catch (err) {
+      console.error(err)
+      toast.error("เกิดข้อผิดพลาดในการอัปเดต")
+    }
   }
 
   return (
@@ -53,7 +90,7 @@ export default function AdminSettingsPage() {
               />
             </div>
             <Button onClick={handleSave} className="w-full">
-              บันทึกการตั้งค่า
+              อัปเดตการตั้งค่า
             </Button>
           </CardContent>
         </Card>

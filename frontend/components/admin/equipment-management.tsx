@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -11,57 +11,23 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, Plus, Edit, Trash2, Package } from "lucide-react"
 import Image from "next/image"
-
-const mockEquipments = [
-  {
-    id: "1",
-    name: "Arduino Uno R3",
-    description: "บอร์ดไมโครคอนโทรลเลอร์สำหรับการเรียนรู้และพัฒนาโปรเจค",
-    category: "Microcontroller",
-    available: 15,
-    total: 20,
-    image: "/placeholder-rt7xh.png",
-    location: "ห้องแลป A101",
-    condition: "ดี",
-  },
-  {
-    id: "2",
-    name: "Raspberry Pi 4",
-    description: "คอมพิวเตอร์ขนาดเล็กสำหรับการเรียนรู้การเขียนโปรแกรม",
-    category: "Single Board Computer",
-    available: 8,
-    total: 12,
-    image: "/raspberry-pi-4-board.png",
-    location: "ห้องแลป A102",
-    condition: "ดี",
-  },
-  {
-    id: "3",
-    name: "Digital Multimeter",
-    description: "เครื่องมือวัดค่าไฟฟ้าแบบดิจิทัล",
-    category: "Measurement Tool",
-    available: 25,
-    total: 30,
-    image: "/placeholder-db6ew.png",
-    location: "ห้องแลป B201",
-    condition: "ดี",
-  },
-]
+import { endpoints } from "@/lib/api"
+import API_URL from "@/lib/api"
 
 interface Equipment {
-  id: string
+  equipmentId: number
   name: string
   description: string
   category: string
-  available: number
-  total: number
-  image: string
+  availableQuantity: number
+  totalQuantity: number
+  imageUrl: string
   location: string
   condition: string
 }
 
 export function EquipmentManagement() {
-  const [equipments, setEquipments] = useState<Equipment[]>(mockEquipments)
+  const [equipments, setEquipments] = useState<Equipment[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [showAddDialog, setShowAddDialog] = useState(false)
@@ -71,65 +37,51 @@ export function EquipmentManagement() {
     name: "",
     description: "",
     category: "",
-    total: 0,
+    totalQuantity: 0,
     location: "",
     condition: "ดี",
+    imageUrl: "",
   })
 
-  const categories = ["all", ...Array.from(new Set(equipments.map((eq) => eq.category)))]
+  useEffect(() => {
+    fetchEquipments()
+  }, [])
 
-  const filteredEquipments = equipments.filter((equipment) => {
-    const matchesSearch =
-      equipment.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      equipment.description.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === "all" || equipment.category === selectedCategory
-    return matchesSearch && matchesCategory
-  })
+  const fetchEquipments = async () => {
+    const res = await fetch(endpoints.admin.equipments.readAll)
+    const data = await res.json()
+    setEquipments(data)
+  }
 
-  const handleAdd = () => {
-    if (!formData.name || !formData.category || formData.total <= 0) return
-    const newEquipment: Equipment = {
-      id: Date.now().toString(),
-      name: formData.name,
-      description: formData.description,
-      category: formData.category,
-      available: formData.total,
-      total: formData.total,
-      image: "/placeholder.svg",
-      location: formData.location,
-      condition: formData.condition,
-    }
-    setEquipments([...equipments, newEquipment])
+  const handleAdd = async () => {
+    if (!formData.name || !formData.category || formData.totalQuantity <= 0) return
+    await fetch(endpoints.admin.equipments.create, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    })
+    fetchEquipments()
     resetForm()
     setShowAddDialog(false)
   }
 
-  const handleEdit = () => {
-    if (!editingEquipment || !formData.name || !formData.category || formData.total <= 0) return
-    setEquipments(
-      equipments.map((eq) =>
-        eq.id === editingEquipment.id
-          ? {
-              ...eq,
-              name: formData.name,
-              description: formData.description,
-              category: formData.category,
-              total: formData.total,
-              available: Math.min(eq.available, formData.total),
-              location: formData.location,
-              condition: formData.condition,
-            }
-          : eq,
-      ),
-    )
+  const handleEdit = async () => {
+    if (!editingEquipment || !formData.name || !formData.category || formData.totalQuantity <= 0) return
+    await fetch(endpoints.admin.equipments.updateById(String(editingEquipment.equipmentId)), {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    })
+    fetchEquipments()
     resetForm()
     setShowEditDialog(false)
     setEditingEquipment(null)
   }
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: number) => {
     if (confirm("คุณแน่ใจหรือไม่ที่จะลบอุปกรณ์นี้?")) {
-      setEquipments(equipments.filter((eq) => eq.id !== id))
+      await fetch(endpoints.admin.equipments.deleteById(String(id)), { method: "DELETE" })
+      fetchEquipments()
     }
   }
 
@@ -139,9 +91,10 @@ export function EquipmentManagement() {
       name: equipment.name,
       description: equipment.description,
       category: equipment.category,
-      total: equipment.total,
+      totalQuantity: equipment.totalQuantity,
       location: equipment.location,
       condition: equipment.condition,
+      imageUrl: equipment.imageUrl,
     })
     setShowEditDialog(true)
   }
@@ -151,17 +104,32 @@ export function EquipmentManagement() {
       name: "",
       description: "",
       category: "",
-      total: 0,
+      totalQuantity: 0,
       location: "",
       condition: "ดี",
+      imageUrl: "",
     })
   }
+
+  const categories = ["all", ...Array.from(new Set(equipments.map((eq) => eq.category)))]
+  const filteredEquipments = equipments.filter((equipment) => {
+    const matchesSearch =
+      equipment.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      equipment.description.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesCategory = selectedCategory === "all" || equipment.category === selectedCategory
+    return matchesSearch && matchesCategory
+  })
 
   const getAvailabilityColor = (available: number, total: number) => {
     const ratio = available / total
     if (ratio > 0.5) return "bg-green-100 text-green-800"
     if (ratio > 0.2) return "bg-yellow-100 text-yellow-800"
     return "bg-red-100 text-red-800"
+  }
+
+  const getImageUrl = (imageUrl: string) => {
+    if (!imageUrl) return "/placeholder.svg"
+    return imageUrl.startsWith("http") ? imageUrl : `${API_URL}${imageUrl}`
   }
 
   return (
@@ -205,10 +173,16 @@ export function EquipmentManagement() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredEquipments.map((equipment) => (
-          <Card key={equipment.id} className="hover:shadow-lg transition-shadow">
+          <Card key={equipment.equipmentId} className="hover:shadow-lg transition-shadow">
             <CardHeader className="pb-3">
               <div className="aspect-video relative mb-3 bg-gray-100 rounded-md overflow-hidden">
-                <Image src={equipment.image || "/placeholder.svg"} alt={equipment.name} fill className="object-cover" />
+                <Image
+                  src={getImageUrl(equipment.imageUrl)}
+                  alt={equipment.name}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover"
+                />
               </div>
               <div className="flex items-start justify-between">
                 <div className="flex-1">
@@ -225,7 +199,7 @@ export function EquipmentManagement() {
                     variant="ghost"
                     size="icon"
                     className="h-8 w-8 text-red-500 hover:text-red-700"
-                    onClick={() => handleDelete(equipment.id)}
+                    onClick={() => handleDelete(equipment.equipmentId)}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -237,8 +211,8 @@ export function EquipmentManagement() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">คงเหลือ:</span>
-                  <Badge className={getAvailabilityColor(equipment.available, equipment.total)}>
-                    {equipment.available}/{equipment.total}
+                  <Badge className={getAvailabilityColor(equipment.availableQuantity, equipment.totalQuantity)}>
+                    {equipment.availableQuantity}/{equipment.totalQuantity}
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
@@ -303,12 +277,12 @@ export function EquipmentManagement() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="total">จำนวนทั้งหมด *</Label>
+                <Label htmlFor="totalQuantity">จำนวนทั้งหมด *</Label>
                 <Input
-                  id="total"
+                  id="totalQuantity"
                   type="number"
-                  value={formData.total}
-                  onChange={(e) => setFormData({ ...formData, total: Number.parseInt(e.target.value) || 0 })}
+                  value={formData.totalQuantity}
+                  onChange={(e) => setFormData({ ...formData, totalQuantity: Number.parseInt(e.target.value) || 0 })}
                   placeholder="จำนวน"
                   min="1"
                 />
@@ -337,7 +311,7 @@ export function EquipmentManagement() {
               </Select>
             </div>
             <div className="flex space-x-2">
-              <Button onClick={handleAdd} disabled={!formData.name || !formData.category || formData.total <= 0}>
+              <Button onClick={handleAdd} disabled={!formData.name || !formData.category || formData.totalQuantity <= 0}>
                 เพิ่มอุปกรณ์
               </Button>
               <Button variant="outline" onClick={() => setShowAddDialog(false)}>
@@ -387,12 +361,12 @@ export function EquipmentManagement() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="edit-total">จำนวนทั้งหมด *</Label>
+                <Label htmlFor="edit-totalQuantity">จำนวนทั้งหมด *</Label>
                 <Input
-                  id="edit-total"
+                  id="edit-totalQuantity"
                   type="number"
-                  value={formData.total}
-                  onChange={(e) => setFormData({ ...formData, total: Number.parseInt(e.target.value) || 0 })}
+                  value={formData.totalQuantity}
+                  onChange={(e) => setFormData({ ...formData, totalQuantity: Number.parseInt(e.target.value) || 0 })}
                   placeholder="จำนวน"
                   min="1"
                 />
@@ -421,7 +395,7 @@ export function EquipmentManagement() {
               </Select>
             </div>
             <div className="flex space-x-2">
-              <Button onClick={handleEdit} disabled={!formData.name || !formData.category || formData.total <= 0}>
+              <Button onClick={handleEdit} disabled={!formData.name || !formData.category || formData.totalQuantity <= 0}>
                 บันทึกการแก้ไข
               </Button>
               <Button variant="outline" onClick={() => setShowEditDialog(false)}>

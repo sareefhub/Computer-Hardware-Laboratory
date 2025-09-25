@@ -1,29 +1,31 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Search, User, Calendar, Package, ArrowRight } from "lucide-react"
+import { endpoints } from "@/lib/api"
 
 type BorrowItem = { name: string; quantity: number }
 
 type BorrowingRequest = {
-  id: string
+  requestId: string
   studentId: string
   studentName: string
+  studentCode: string
   course: string
   reason: string
+  notes?: string
   requestDate: string
-  status: string
-  statusEmoji: string
   statusCode: number
+  priority: string
+  approvedDate?: string
+  rejectedDate?: string
+  rejectionReason?: string
   items: BorrowItem[]
-  borrowedDate?: string
-  dueDate?: string
-  returnedDate?: string
 }
 
 const statusOptions = [
@@ -34,79 +36,34 @@ const statusOptions = [
   { code: 5, label: "คืนอุปกรณ์เสร็จแล้ว", emoji: "🔄", color: "bg-purple-100 text-purple-800" },
 ]
 
-const mockBorrowingRequests: BorrowingRequest[] = [
-  {
-    id: "1/2568-65010001-001",
-    studentId: "65010001",
-    studentName: "นายสมชาย ใจดี",
-    course: "CPE101 - Computer Programming",
-    reason: "Assignment - งานที่ได้รับมอบหมาย",
-    requestDate: "2024-01-15T10:30:00",
-    status: "รอการอนุมัติจากอาจารย์",
-    statusEmoji: "👨‍🏫",
-    statusCode: 1,
-    items: [
-      { name: "Arduino Uno R3", quantity: 2 },
-      { name: "Breadboard", quantity: 1 },
-    ],
-  },
-  {
-    id: "1/2568-65010002-002",
-    studentId: "65010002",
-    studentName: "นางสาวสมหญิง ใจงาม",
-    course: "CPE102 - Digital Logic Design",
-    reason: "Lab - การทดลอง",
-    requestDate: "2024-01-14T14:15:00",
-    status: "เจ้าหน้าที่กำลังเตรียมอุปกรณ์",
-    statusEmoji: "🔧",
-    statusCode: 2,
-    items: [{ name: "Digital Multimeter", quantity: 1 }],
-  },
-  {
-    id: "1/2568-65010003-003",
-    studentId: "65010003",
-    studentName: "นายสมศักดิ์ ใจดี",
-    course: "CPE201 - Data Structures",
-    reason: "Project - โครงงาน",
-    requestDate: "2024-01-13T09:45:00",
-    status: "เจ้าหน้าที่เตรียมอุปกรณ์เสร็จแล้ว",
-    statusEmoji: "✅",
-    statusCode: 3,
-    items: [{ name: "Raspberry Pi 4", quantity: 1 }],
-  },
-  {
-    id: "1/2568-65010004-004",
-    studentId: "65010004",
-    studentName: "นางสาวสมใจ รักเรียน",
-    course: "CPE301 - Database Systems",
-    reason: "Assignment - งานที่ได้รับมอบหมาย",
-    requestDate: "2024-01-12T16:20:00",
-    status: "เบิกแล้วรอการคืนอุปกรณ์",
-    statusEmoji: "📦",
-    statusCode: 4,
-    items: [{ name: "Oscilloscope", quantity: 1 }],
-    borrowedDate: "2024-01-13T10:00:00",
-    dueDate: "2024-01-20T17:00:00",
-  },
-  {
-    id: "1/2568-65010005-005",
-    studentId: "65010005",
-    studentName: "นายสมปอง ใจดี",
-    course: "CPE102 - Digital Logic Design",
-    reason: "Lab - การทดลอง",
-    requestDate: "2024-01-10T11:30:00",
-    status: "คืนอุปกรณ์เสร็จแล้ว",
-    statusEmoji: "🔄",
-    statusCode: 5,
-    items: [{ name: "Soldering Iron", quantity: 2 }],
-    borrowedDate: "2024-01-11T09:00:00",
-    returnedDate: "2024-01-14T15:30:00",
-  },
-]
-
 export function BorrowingManagement() {
-  const [requests, setRequests] = useState<BorrowingRequest[]>(mockBorrowingRequests)
+  const [requests, setRequests] = useState<BorrowingRequest[]>([])
   const [searchTerm, setSearchTerm] = useState("")
+
+  useEffect(() => {
+    fetchRequests()
+  }, [])
+
+  const fetchRequests = async () => {
+    const res = await fetch(endpoints.teacher.getAllBorrowing)
+    const data = await res.json()
+    setRequests(data)
+  }
+
+  const nextStatus = async (request: BorrowingRequest) => {
+    try {
+      if (request.statusCode === 2) {
+        await fetch(endpoints.admin.borrowing.updatePrepare(request.requestId), { method: "PUT" })
+      } else if (request.statusCode === 3) {
+        await fetch(endpoints.admin.borrowing.updateBorrow(request.requestId), { method: "PUT" })
+      } else if (request.statusCode === 4) {
+        await fetch(endpoints.admin.borrowing.updateReturn(request.requestId), { method: "PUT" })
+      }
+      fetchRequests()
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
   const filteredRequests = requests.filter((request) => {
     const s = searchTerm.toLowerCase()
@@ -114,32 +71,13 @@ export function BorrowingManagement() {
       request.studentName.toLowerCase().includes(s) ||
       request.studentId.includes(searchTerm) ||
       request.course.toLowerCase().includes(s) ||
-      request.id.includes(searchTerm)
+      request.requestId.includes(searchTerm)
     const isVisibleForAdmin = request.statusCode >= 2
     return matchesSearch && isVisibleForAdmin
   })
 
-  const nextStatus = (requestId: string) => {
-    setRequests((prev) =>
-      prev.map((req) => {
-        if (req.id === requestId && req.statusCode < 5) {
-          const newCode = req.statusCode + 1
-          const s = statusOptions.find((x) => x.code === newCode)!
-          return {
-            ...req,
-            status: s.label,
-            statusEmoji: s.emoji,
-            statusCode: newCode,
-            borrowedDate: newCode === 4 ? new Date().toISOString() : req.borrowedDate,
-            returnedDate: newCode === 5 ? new Date().toISOString() : req.returnedDate,
-          }
-        }
-        return req
-      })
-    )
-  }
-
-  const getStatusColor = (code: number) => statusOptions.find((s) => s.code === code)?.color || "bg-gray-100 text-gray-800"
+  const getStatus = (code: number) => statusOptions.find((s) => s.code === code)
+  const getStatusColor = (code: number) => getStatus(code)?.color || "bg-gray-100 text-gray-800"
 
   return (
     <div className="space-y-6">
@@ -183,91 +121,73 @@ export function BorrowingManagement() {
             <p className="text-gray-500 text-lg">ไม่พบคำขอที่ค้นหา</p>
           </div>
         ) : (
-          filteredRequests.map((request) => (
-            <Card key={request.id} className="hover:shadow-md transition-shadow">
-              <CardHeader>
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
-                  <div className="flex-1">
-                    <CardTitle className="text-lg">คำขอ #{request.id}</CardTitle>
-                    <CardDescription className="space-y-1">
-                      <div className="flex items-center space-x-4 text-sm">
-                        <span className="flex items-center space-x-1">
-                          <Calendar className="h-4 w-4" />
-                          <span>{new Date(request.requestDate).toLocaleDateString("th-TH")}</span>
-                        </span>
-                      </div>
-                    </CardDescription>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl">{request.statusEmoji}</span>
-                    <Badge className={getStatusColor(request.statusCode)}>{request.status}</Badge>
-                  </div>
-                </div>
-              </CardHeader>
-
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex items-center space-x-2">
-                    <User className="h-4 w-4 text-gray-500" />
-                    <div>
-                      <p className="font-medium text-sm">{request.studentName}</p>
-                      <p className="text-xs text-gray-500">{request.studentId}</p>
+          filteredRequests.map((request) => {
+            const status = getStatus(request.statusCode)
+            return (
+              <Card key={request.requestId} className="hover:shadow-md transition-shadow">
+                <CardHeader>
+                  <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+                    <div className="flex-1">
+                      <CardTitle className="text-lg">คำขอ #{request.requestId}</CardTitle>
+                      <CardDescription className="space-y-1">
+                        <div className="flex items-center space-x-4 text-sm">
+                          <span className="flex items-center space-x-1">
+                            <Calendar className="h-4 w-4" />
+                            <span>{new Date(request.requestDate).toLocaleDateString("th-TH")}</span>
+                          </span>
+                        </div>
+                      </CardDescription>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl">{status?.emoji}</span>
+                      <Badge className={getStatusColor(request.statusCode)}>{status?.label}</Badge>
                     </div>
                   </div>
-                  <div>
-                    <p className="font-medium text-sm">{request.course}</p>
-                    <p className="text-xs text-gray-500">{request.reason}</p>
-                  </div>
-                </div>
+                </CardHeader>
 
-                <div>
-                  <div className="flex items-center space-x-2 mb-2">
-                    <Package className="h-4 w-4 text-gray-500" />
-                    <Label className="text-sm font-medium">รายการอุปกรณ์</Label>
-                  </div>
-                  <div className="space-y-2">
-                    {request.items.map((item, index) => (
-                      <div key={index} className="bg-gray-50 rounded-lg p-3">
-                        <div className="flex justify-between items-start mb-1">
-                          <span className="font-medium text-sm">{item.name}</span>
-                          <Badge variant="outline" className="text-xs">
-                            จำนวน: {item.quantity}
-                          </Badge>
-                        </div>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center space-x-2">
+                      <User className="h-4 w-4 text-gray-500" />
+                      <div>
+                        <p className="font-medium text-sm">{request.studentName}</p>
+                        <p className="text-xs text-gray-500">{request.studentCode}</p>
                       </div>
-                    ))}
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm">{request.course}</p>
+                      <p className="text-xs text-gray-500">{request.reason}</p>
+                    </div>
                   </div>
-                </div>
 
-                {request.borrowedDate && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                    <p className="text-sm text-blue-800">
-                      <strong>วันที่เบิก:</strong> {new Date(request.borrowedDate).toLocaleDateString("th-TH")}
-                    </p>
-                    {request.dueDate && (
-                      <p className="text-sm text-blue-800">
-                        <strong>กำหนดคืน:</strong> {new Date(request.dueDate).toLocaleDateString("th-TH")}
-                      </p>
-                    )}
+                  <div>
+                    <div className="flex items-center space-x-2 mb-2">
+                      <Package className="h-4 w-4 text-gray-500" />
+                      <Label className="text-sm font-medium">รายการอุปกรณ์</Label>
+                    </div>
+                    <div className="space-y-2">
+                      {request.items.map((item, index) => (
+                        <div key={index} className="bg-gray-50 rounded-lg p-3">
+                          <div className="flex justify-between items-start mb-1">
+                            <span className="font-medium text-sm">{item.name}</span>
+                            <Badge variant="outline" className="text-xs">
+                              จำนวน: {item.quantity}
+                            </Badge>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                )}
 
-                {request.returnedDate && (
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                    <p className="text-sm text-green-800">
-                      <strong>วันที่คืน:</strong> {new Date(request.returnedDate).toLocaleDateString("th-TH")}
-                    </p>
-                  </div>
-                )}
-
-                {request.statusCode < 5 && (
-                  <Button onClick={() => nextStatus(request.id)} className="w-full flex items-center gap-2">
-                    ดำเนินการขั้นถัดไป <ArrowRight className="h-4 w-4" />
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-          ))
+                  {request.statusCode < 5 && (
+                    <Button onClick={() => nextStatus(request)} className="w-full flex items-center gap-2">
+                      ดำเนินการขั้นถัดไป <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            )
+          })
         )}
       </div>
     </div>
